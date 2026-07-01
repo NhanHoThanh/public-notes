@@ -6,7 +6,7 @@ publish: true
 
 # Nhan Ho
 
-Notes, writing, and research — mostly on AI, infrastructure, and the things I find worth understanding deeply.
+Notes, writing, and research — mostly on AI, Data and infrastructure, and the things I find worth understanding deeply.
 
 > [!note] About this site
 > This is a public garden of my working notes. Some pages are polished essays; others are raw research. If something is published here, it's worth reading.
