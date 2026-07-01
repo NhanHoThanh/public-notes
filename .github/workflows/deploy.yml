@@ -1,3 +1,6 @@
+mkdir -p .github/workflows
+
+cat > .github/workflows/deploy.yml <<'EOF'
 name: Deploy Quartz site to GitHub Pages
 
 on:
@@ -51,3 +54,4 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+EOF
