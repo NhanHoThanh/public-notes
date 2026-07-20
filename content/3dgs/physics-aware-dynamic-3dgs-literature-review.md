@@ -1,6 +1,6 @@
 # Compact, Physics-Aware Dynamic 3D Gaussian Representations for Online Perception and Interaction
 
-> **Literature review and research-gap map — as of 2026-07-12.** Core evidence: 78 unique technical works. Detailed records, status labels, evaluation fields, and scope boundaries are in the [companion evidence matrix](quartz/content/3dgs%201/physics-aware-dynamic-3dgs-evidence-matrix.md).
+> **Literature review and research-gap map — as of 2026-07-12.** Core evidence: 78 unique technical works. Detailed records, status labels, evaluation fields, and scope boundaries are in the [companion evidence matrix](3dgs/physics-aware-dynamic-3dgs-evidence-matrix.md).
 
 ---
 
@@ -50,7 +50,7 @@ Three distinctions should remain explicit throughout:
 
 ### Status-quo map
 
-![Two horizontal bar charts showing the number of reviewed works by primary research strand and by overlapping capability tag. Dynamic and deformable work is the largest group, while physics and interaction form smaller subsets.](quartz/content/3dgs%201/assets/physics-aware-dynamic-3dgs/01-status-quo-corpus.png)
+![Two horizontal bar charts showing the number of reviewed works by primary research strand and by overlapping capability tag. Dynamic and deformable work is the largest group, while physics and interaction form smaller subsets.](3dgs/assets/physics-aware-dynamic-3dgs/01-status-quo-corpus.png)
 
 **Figure 1 — Corpus and capability coverage.** The left panel assigns each of the 78 works to its evidence-matrix section; the right panel counts overlapping tags. The imbalance makes the current status quo visible: the field has a deep base in time-varying visual reconstruction, but substantially fewer works connect that base to physics, SLAM, or interaction. Counts describe the review corpus, not the total global publication volume.
 
@@ -120,7 +120,7 @@ A deployable system must decide which state persists through occlusion, loop clo
 
 ## 4. Physics Awareness: Simulation, Identification, and Optics
 
-> **Detailed expansion:** [Physics Awareness in 3D Gaussian Splatting: Simulation, Identification, and Physical Image Formation](quartz/content/3dgs%201/physics-aware-3dgs-simulation-identification-optics-literature-review.md) reviews 115 strict Gaussian-centric work families through 2026-07-20, including paywalled novelty, exact recovered hardware constraints, an [auditable matrix](quartz/content/3dgs%201/physics-aware-3dgs-simulation-identification-optics-evidence-matrix.md), and six generated status-quo figures.
+> **Detailed expansion:** [Physics Awareness in 3D Gaussian Splatting: Simulation, Identification, and Physical Image Formation](3dgs/physics-aware-3dgs-simulation-identification-optics-literature-review.md) reviews 115 strict Gaussian-centric work families through 2026-07-20, including paywalled novelty, exact recovered hardware constraints, an [auditable matrix](3dgs/physics-aware-3dgs-simulation-identification-optics-evidence-matrix.md), and six generated status-quo figures.
 
 ### Forward mechanics
 
@@ -182,7 +182,7 @@ These systems begin to connect perception and intervention, but training distrib
 4. **Evaluation remains siloed.** Rendering uses PSNR/SSIM/LPIPS; SLAM uses ATE/RPE; compression uses bytes and FPS; physics uses parameter/trajectory error or user preference; robotics uses task success. Few papers report more than two families together.
 5. **Causal evidence is rare.** A method deserves “physics-aware” most strongly when it predicts measured unseen interventions, recovers identifiable parameters, or improves closed-loop task outcomes—not merely when motion looks plausible.
 
-![Heatmap showing the percentage and count of papers in each research strand that report appearance, geometry, state-estimation, physical-behavior, efficiency, or task-outcome metrics. Each strand concentrates on its own metric family.](quartz/content/3dgs%201/assets/physics-aware-dynamic-3dgs/02-metric-landscape.png)
+![Heatmap showing the percentage and count of papers in each research strand that report appearance, geometry, state-estimation, physical-behavior, efficiency, or task-outcome metrics. Each strand concentrates on its own metric family.](3dgs/assets/physics-aware-dynamic-3dgs/02-metric-landscape.png)
 
 **Figure 2 — Metric landscape.** A cell records whether a paper's evidence field reports at least one metric in that family; it does not score the paper's performance. Keyword coding makes the siloing concrete: SLAM consistently measures state estimation, compression consistently measures resource cost, and robot work most often measures task outcomes, while joint coverage remains sparse. A credible physics-aware dynamic system should report across these columns rather than selecting only its home strand's metrics.
 
@@ -208,7 +208,7 @@ Model size, stream bitrate, GPU memory, training memory, decode time, update ban
 
 Photorealistic splats can be sparse inside objects and inaccurate at occluded surfaces. Physics needs volume, collision geometry, and material connectivity. Mesh binding, generative completion, particle filling, and hybrid Gaussian–particle models make different failure tradeoffs; none is universally reliable.
 
-![Qualitative capability heatmap comparing dynamic rendering, Gaussian SLAM, physics-aware Gaussians, dynamic compression, and robot action models across online estimation, persistent identity, deformation, material identification, contact, rate accounting, intervention prediction, task evaluation, and uncertainty. No strand covers all capabilities.](quartz/content/3dgs%201/assets/physics-aware-dynamic-3dgs/03-capability-gap-map.png)
+![Qualitative capability heatmap comparing dynamic rendering, Gaussian SLAM, physics-aware Gaussians, dynamic compression, and robot action models across online estimation, persistent identity, deformation, material identification, contact, rate accounting, intervention prediction, task evaluation, and uncertainty. No strand covers all capabilities.](3dgs/assets/physics-aware-dynamic-3dgs/03-capability-gap-map.png)
 
 **Figure 3 — Capability-gap map.** This is a qualitative synthesis, not a paper-count statistic. “Established” means a capability is routine in that strand; “emerging” means multiple concrete systems exist; “rare” denotes isolated or limited evidence; and “missing” means the review found no strand-level demonstration. The nearly empty vertical slices for calibrated uncertainty and the weak coupling between online mapping, physical identification, compression, and control explain why integration—not another isolated renderer improvement—is the main gap.
 
@@ -234,7 +234,7 @@ Scores use **gap confidence** (how clearly the literature leaves the problem ope
 | 6    | **Physics-aware endoscopic digital twin**                       |            4/5 |         3/5 | Infer tissue parameters or force response rather than manually choosing them; use surgical reconstruction quality plus deformation/resimulation error and uncertainty                                  |
 | 7    | **Unified cross-strand benchmark**                              |            5/5 |         4/5 | Create common scenes and accounting rules for appearance, geometry, camera/object tracking, physics, bitrate, latency, and interaction success; include failure annotations and reproducible baselines |
 
-![Scatter plot of seven research directions by gap confidence and student feasibility. Physics-state-aware compression, persistent dynamic-object Photo-SLAM, and a unified benchmark occupy the high-confidence, high-feasibility region.](quartz/content/3dgs%201/assets/physics-aware-dynamic-3dgs/04-research-agenda.png)
+![Scatter plot of seven research directions by gap confidence and student feasibility. Physics-state-aware compression, persistent dynamic-object Photo-SLAM, and a unified benchmark occupy the high-confidence, high-feasibility region.](3dgs/assets/physics-aware-dynamic-3dgs/04-research-agenda.png)
 
 **Figure 4 — Research-direction frontier.** The point labels are the table ranks. Physics-state-aware compression, persistent dynamic-object Photo-SLAM, and the unified benchmark share the strongest confidence/feasibility score; uncertainty-aware material identification is compelling but harder, while action-conditioned object-centric GS-SLAM carries the greatest integration risk.
 
@@ -253,9 +253,9 @@ For the best novelty-to-risk balance, start with **Rank 1** or **Rank 2**. A phy
 
 ## Sources
 
-The [evidence matrix](quartz/content/3dgs%201/physics-aware-dynamic-3dgs-evidence-matrix.md) is the authoritative source index for this review. It records all 78 core works with stable IDs, publication status, tags, setting, method, evaluation evidence, code status, and scope boundary. Survey papers and local narrative notes were used only for discovery and were not counted as primary technical evidence.
+The [evidence matrix](3dgs/physics-aware-dynamic-3dgs-evidence-matrix.md) is the authoritative source index for this review. It records all 78 core works with stable IDs, publication status, tags, setting, method, evaluation evidence, code status, and scope boundary. Survey papers and local narrative notes were used only for discovery and were not counted as primary technical evidence.
 
-All four figures are reproducible with [`generate_literature_review_visualizations.py`](quartz/content/3dgs%201/generate_literature_review_visualizations.py). Figures 1 and 2 are parsed from the evidence matrix, Figure 3 encodes the review's explicit qualitative maturity rubric, and Figure 4 uses the ranked-agenda scores above. This separation prevents qualitative judgments from being presented as measured paper counts.
+All four figures are reproducible with [`generate_literature_review_visualizations.py`](3dgs/generate_literature_review_visualizations.py). Figures 1 and 2 are parsed from the evidence matrix, Figure 3 encodes the review's explicit qualitative maturity rubric, and Figure 4 uses the ranked-agenda scores above. This separation prevents qualitative judgments from being presented as measured paper counts.
 
 One seed correction matters for future reruns: the previously recorded `arxiv:2402.11755` is unrelated to Gaussian rendering. The verified paper is [3DGUT, arxiv:2412.12507](https://arxiv.org/abs/2412.12507).
 

@@ -1,6 +1,6 @@
 # Physics-Aware Dynamic 3DGS — Evidence Matrix
 
-> **As of 2026-07-12.** Companion to [Physics-Aware Dynamic 3DGS Literature Review](quartz/content/3dgs%201/physics-aware-dynamic-3dgs-literature-review.md). This matrix contains 78 unique works: 72 from the 3DGS era and six older roots selected for dynamic radiance fields, non-rigid reconstruction, SLAM, and continuum physics.
+> **As of 2026-07-12.** Companion to [Physics-Aware Dynamic 3DGS Literature Review](3dgs/physics-aware-dynamic-3dgs-literature-review.md). This matrix contains 78 unique works: 72 from the 3DGS era and six older roots selected for dynamic radiance fields, non-rigid reconstruction, SLAM, and continuum physics.
 
 ---
 

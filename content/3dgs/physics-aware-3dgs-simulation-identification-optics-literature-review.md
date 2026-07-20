@@ -2,7 +2,7 @@
 
 > **Detailed literature review — evidence frozen 2026-07-20.** Core corpus: **115** Gaussian-centric work families (**90 E2 full-text, 25 E1 primary abstract/metadata**). Publication access, novelty, causal evidence, and hardware reporting are coded independently; a paywalled venue does not disqualify novelty, and a fast renderer does not by itself establish a deployable physics system.
 
-**Companions:** [auditable evidence matrix](quartz/content/3dgs%201/physics-aware-3dgs-simulation-identification-optics-evidence-matrix.md) · [machine-readable dataset](quartz/content/3dgs%201/physics-aware-3dgs-simulation-identification-optics-data.json) · [Matplotlib generator](quartz/content/3dgs%201/generate_physics_aware_3dgs_review_assets.py)
+**Companions:** [auditable evidence matrix](3dgs/physics-aware-3dgs-simulation-identification-optics-evidence-matrix.md) · [machine-readable dataset](3dgs/physics-aware-3dgs-simulation-identification-optics-data.json) · [Matplotlib generator](3dgs/generate_physics_aware_3dgs_review_assets.py)
 
 ## Abstract
 
@@ -68,11 +68,11 @@ The field becomes coherent when classified by **inverse problem and Gaussian rol
 
 Two terms require particular care. **Mechanical material** normally means constitutive properties such as elasticity, plasticity, viscosity, density, or damping. **Optical material** means reflectance, roughness, metallicity, index of refraction, absorption, or scattering. A method that recovers a BRDF is performing a physically based inverse problem, but it has not identified stiffness. The review keeps both under “physics awareness” while never merging their evidence.
 
-![Stacked publication timeline and corpus counts for forward mechanics, inverse identification, learned physics/control, and physics-based image formation.](quartz/content/3dgs%201/assets/physics-aware-3dgs-detailed/01-status-quo-timeline.png)
+![Stacked publication timeline and corpus counts for forward mechanics, inverse identification, learned physics/control, and physics-based image formation.](3dgs/assets/physics-aware-3dgs-detailed/01-status-quo-timeline.png)
 
 **Figure 1 — Status quo.** The strict corpus contains 57 physics-based image-formation works, 23 identification/digital-twin works, 20 forward-mechanics works, and 15 learned-physics/control works. Counts use first-public date and merge preprint/venue versions; 2026 is partial through 20 July. The image-formation total includes 24 E1 records, so the plot measures novelty breadth rather than equal depth of evidence. It is not a claim that every paper published worldwide has been enumerated.
 
-![Heatmap of demonstrated capabilities by eight stable analysis families.](quartz/content/3dgs%201/assets/physics-aware-3dgs-detailed/02-capability-coverage.png)
+![Heatmap of demonstrated capabilities by eight stable analysis families.](3dgs/assets/physics-aware-3dgs-detailed/02-capability-coverage.png)
 
 **Figure 2 — Capability coverage.** “Explicit physical state,” “parameter identification,” “contact,” “unseen intervention,” “closed loop,” and “optical transport” are coded from demonstrated method/evaluation evidence. The heatmap makes a central fact visible: no single home discipline covers the whole stack. Forward solvers encode state and sometimes contact but rarely infer it; inverse-rendering systems recover optical quantities but rarely mechanics; learned prediction sometimes supports interventions but often weakens physical interpretability.
 
@@ -173,7 +173,7 @@ Three evaluation errors recur in this branch:
 
 The minimum strong evaluation combines image/geometry error with state rollout, held-out forces or actions, stability over longer horizons, and either task success or parameter/state calibration. Conservation should be tested when the architecture claims it; otherwise the claim should be framed as predictive rather than physically faithful.
 
-![Distribution of causal-evidence levels across the four review branches.](quartz/content/3dgs%201/assets/physics-aware-3dgs-detailed/03-causal-evidence.png)
+![Distribution of causal-evidence levels across the four review branches.](3dgs/assets/physics-aware-3dgs-detailed/03-causal-evidence.png)
 
 **Figure 3 — Causal evidence.** A C2 paper can contain a rigorous solver or transport law, while C4–C5 require evidence beyond reconstructing the input observations. The distribution is expected to be asymmetric: optical inverse rendering often validates held-out illumination, whereas mechanical closed-loop studies require actuated capture and are much rarer.
 
@@ -237,7 +237,7 @@ These methods demonstrate that “rendering” is really a differentiable measur
 
 ## 7. Metric Landscape: What the Field Measures and What It Misses
 
-![Heatmap showing metric-family reporting across mechanics, identification, learned dynamics/control, inverse rendering, camera/sensor formation, and media/radiative imaging.](quartz/content/3dgs%201/assets/physics-aware-3dgs-detailed/04-metric-landscape.png)
+![Heatmap showing metric-family reporting across mechanics, identification, learned dynamics/control, inverse rendering, camera/sensor formation, and media/radiative imaging.](3dgs/assets/physics-aware-3dgs-detailed/04-metric-landscape.png)
 
 **Figure 4 — Metric landscape.** The heatmap marks whether a paper reports at least one metric in a family; it does not compare magnitudes across incompatible datasets. The concentration along disciplinary columns is itself the result: inverse rendering measures appearance and sometimes material/light; simulation measures physical behavior; identification measures parameters; systems papers measure efficiency; control papers measure tasks. Few studies span the full chain their claims imply.
 
@@ -265,7 +265,7 @@ These methods demonstrate that “rendering” is really a differentiable measur
 
 Novelty and feasibility answer different questions. A method trained for two days on H100s can be scientifically novel; a 200 FPS renderer can still require hours of per-scene fitting; a paper that omits VRAM is not necessarily slow. The correct policy is to transcribe the reported setup and mark missing fields as **not reported/recovered**, without inferring “consumer-ready,” “real time,” or “efficient” from the GPU name alone.
 
-![Heatmap of hardware-field reporting by review branch.](quartz/content/3dgs%201/assets/physics-aware-3dgs-detailed/05-hardware-reporting.png)
+![Heatmap of hardware-field reporting by review branch.](3dgs/assets/physics-aware-3dgs-detailed/05-hardware-reporting.png)
 
 **Figure 5 — Recovered hardware-field coverage.** The denominator is E2/E3 full-text evidence, not the entire novelty census. GPU, VRAM, training/fitting time, simulation/update rate, rendering rate, end-to-end latency, memory/model size, and sensor setup are counted independently. A rendering FPS entry does not fill simulation/update or end-to-end latency; sparse end-to-end and memory reporting makes deployment claims especially difficult to reproduce.
 
@@ -362,7 +362,7 @@ A better renderer can reduce systematic residuals from shadows, gloss, blur, or 
 
 ## 11. Ranked Research Agenda
 
-![Scatter plot of research directions by gap confidence and student feasibility.](quartz/content/3dgs%201/assets/physics-aware-3dgs-detailed/06-research-agenda.png)
+![Scatter plot of research directions by gap confidence and student feasibility.](3dgs/assets/physics-aware-3dgs-detailed/06-research-agenda.png)
 
 **Figure 6 — Research-direction frontier.** Scores are a qualitative synthesis for a 6–12 month project, not a performance ranking. The best near-term directions create stronger evidence and reusable evaluation rather than requiring a new solver, renderer, sensor rig, and controller simultaneously.
 
@@ -388,7 +388,7 @@ For the best novelty-to-risk balance, a student project should begin with Rank 1
 
 ## 13. Sources, Reproducibility, and Boundaries
 
-The [companion evidence matrix](quartz/content/3dgs%201/physics-aware-3dgs-simulation-identification-optics-evidence-matrix.md) is the authoritative human-readable source index. Every record includes a title, stable primary URL, first-public year, publication/access status, evidence tier, primary branch and subclass, analysis group, novelty, Gaussian role, physical model, inputs, evaluation, limitations, task-dependent causal level, metric families, and hardware fields. The [JSON dataset](quartz/content/3dgs%201/physics-aware-3dgs-simulation-identification-optics-data.json) is the machine-readable source for the matrix and figures, and the [Matplotlib generator](quartz/content/3dgs%201/generate_physics_aware_3dgs_review_assets.py) validates its schema before regenerating every artifact.
+The [companion evidence matrix](3dgs/physics-aware-3dgs-simulation-identification-optics-evidence-matrix.md) is the authoritative human-readable source index. Every record includes a title, stable primary URL, first-public year, publication/access status, evidence tier, primary branch and subclass, analysis group, novelty, Gaussian role, physical model, inputs, evaluation, limitations, task-dependent causal level, metric families, and hardware fields. The [JSON dataset](3dgs/physics-aware-3dgs-simulation-identification-optics-data.json) is the machine-readable source for the matrix and figures, and the [Matplotlib generator](3dgs/generate_physics_aware_3dgs_review_assets.py) validates its schema before regenerating every artifact.
 
 Counts in Figures 1–5 are generated from that dataset. Figure 6 is an explicitly qualitative research judgment. Any numerical performance cited in prose should be traceable to E2/E3 primary evidence; E1 publisher-only records should contribute to novelty coverage and be described conservatively. The review is a reproducible scoping review, not a claim of exhaustive systematic coverage.
 

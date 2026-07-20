@@ -1,6 +1,6 @@
 # Physics-Aware 3DGS — Detailed Evidence Matrix
 
-> **Frozen 2026-07-20.** 115 Gaussian-centric technical works. Companion to [the detailed literature review](quartz/content/3dgs%201/physics-aware-3dgs-simulation-identification-optics-literature-review.md).
+> **Frozen 2026-07-20.** 115 Gaussian-centric technical works. Companion to [the detailed literature review](3dgs/physics-aware-3dgs-simulation-identification-optics-literature-review.md).
 
 ## Evidence and Coding Rules
 
