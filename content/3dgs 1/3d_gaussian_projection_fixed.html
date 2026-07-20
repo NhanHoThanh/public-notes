@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>3D Gaussian Splatting: 3D Gaussian to 2D Projection</title>
+<style>
+  :root {
+    --bg: #020617;
+    --panel: rgba(15, 23, 42, 0.92);
+    --panel2: rgba(30, 41, 59, 0.82);
+    --line: rgba(148, 163, 184, 0.20);
+    --text: #e5e7eb;
+    --muted: #94a3b8;
+    --accent: #38bdf8;
+    --red: #fb7185;
+    --green: #4ade80;
+    --blue: #60a5fa;
+    --yellow: #facc15;
+    --orange: #fb923c;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: var(--text);
+    background: radial-gradient(circle at top left, #1e3a8a 0, transparent 32%),
+                radial-gradient(circle at top right, #075985 0, transparent 30%),
+                #020617;
+  }
+
+  header {
+    padding: 20px 24px 8px;
+  }
+
+  h1 {
+    margin: 0 0 6px;
+    font-size: 24px;
+    font-weight: 760;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    line-height: 1.45;
+    font-size: 14px;
+    max-width: 980px;
+  }
+
+  main {
+    padding: 14px 24px 24px;
+    display: grid;
+    grid-template-columns: minmax(620px, 1fr) 390px;
+    gap: 18px;
+  }
+
+  .card {
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--panel);
+    box-shadow: 0 18px 48px rgba(0,0,0,0.30);
+    overflow: hidden;
+  }
+
+  .visuals {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+
+  .canvasWrap {
+    position: relative;
+    border-right: 1px solid var(--line);
+  }
+
+  .canvasWrap:last-child { border-right: none; }
+
+  .titleBadge {
+    position: absolute;
+    left: 12px;
+    top: 12px;
+    background: rgba(2, 6, 23, 0.76);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    color: #dbeafe;
+    padding: 8px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    line-height: 1.35;
+    backdrop-filter: blur(8px);
+    max-width: calc(100% - 24px);
+  }
+
+  canvas {
+    display: block;
+    width: 100%;
+    height: 610px;
+    background:
+      linear-gradient(rgba(148, 163, 184, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(148, 163, 184, 0.05) 1px, transparent 1px),
+      radial-gradient(circle at center, rgba(56, 189, 248, 0.08), transparent 58%),
+      #020617;
+    background-size: 32px 32px, 32px 32px, auto, auto;
+  }
+
+  #canvas3d { cursor: grab; }
+  #canvas3d:active { cursor: grabbing; }
+
+  .panel {
+    padding: 18px;
+  }
+
+  .section {
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+  }
+
+  .section:first-child { padding-top: 0; }
+  .section:last-child { border-bottom: none; }
+
+  h2 {
+    margin: 0 0 12px;
+    font-size: 15px;
+    color: #f8fafc;
+  }
+
+  label {
+    display: grid;
+    grid-template-columns: 82px 1fr 64px;
+    gap: 9px;
+    align-items: center;
+    margin: 9px 0;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  input[type="range"] {
+    width: 100%;
+    accent-color: var(--accent);
+  }
+
+  .value {
+    color: #f8fafc;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .box {
+    background: var(--panel2);
+    border: 1px solid rgba(148, 163, 184, 0.15);
+    border-radius: 13px;
+    padding: 12px;
+    font-size: 13px;
+    line-height: 1.50;
+  }
+
+  .small {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  .mono, code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    color: #dbeafe;
+  }
+
+  .pill {
+    display: inline-block;
+    padding: 3px 7px;
+    border-radius: 999px;
+    background: rgba(56, 189, 248, 0.13);
+    color: #bae6fd;
+    margin: 2px 3px 2px 0;
+    font-size: 12px;
+  }
+
+  button {
+    width: 100%;
+    border: 0;
+    border-radius: 12px;
+    padding: 10px 12px;
+    color: white;
+    background: linear-gradient(135deg, #0284c7, #2563eb);
+    cursor: pointer;
+    font-weight: 700;
+    margin-top: 8px;
+  }
+
+  button:hover { filter: brightness(1.08); }
+
+  .formula {
+    color: #e0f2fe;
+    line-height: 1.7;
+  }
+
+  @media (max-width: 1080px) {
+    main { grid-template-columns: 1fr; padding: 12px; }
+    header { padding: 18px 14px 4px; }
+  }
+
+  @media (max-width: 760px) {
+    .visuals { grid-template-columns: 1fr; }
+    .canvasWrap { border-right: none; border-bottom: 1px solid var(--line); }
+    canvas { height: 430px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>3D Gaussian → Camera Projection → 2D Splat</h1>
+  <div class="subtitle">
+    Left: a 3D Gaussian ellipsoid in world space, plus the render camera and its image plane.
+    Right: the same Gaussian after projection into a 2D image ellipse using
+    Σ′ = J W Σ Wᵀ Jᵀ.
+  </div>
+</header>
+
+<main>
+  <section class="card visuals">
+    <div class="canvasWrap">
+      <canvas id="canvas3d"></canvas>
+      <div class="titleBadge">
+        <b>3D world view</b><br>
+        Drag to orbit this viewer. Camera yaw/pitch sliders control the render camera.
+      </div>
+    </div>
+    <div class="canvasWrap">
+      <canvas id="canvas2d"></canvas>
+      <div class="titleBadge">
+        <b>2D projected splat</b><br>
+        The ellipse changes with camera angle, depth, scale, and quaternion rotation.
+      </div>
+    </div>
+  </section>
+
+  <aside class="card panel">
+    <div class="section">
+      <h2>Gaussian</h2>
+      <label>μx <input id="mux" type="range" min="-1.5" max="1.5" step="0.01" value="0.35"><span class="value" id="muxv"></span></label>
+      <label>μy <input id="muy" type="range" min="-1.0" max="1.0" step="0.01" value="0.08"><span class="value" id="muyv"></span></label>
+      <label>μz <input id="muz" type="range" min="0.8" max="4.5" step="0.01" value="2.10"><span class="value" id="muzv"></span></label>
+      <label>sx <input id="sx" type="range" min="0.04" max="0.70" step="0.01" value="0.35"><span class="value" id="sxv"></span></label>
+      <label>sy <input id="sy" type="range" min="0.04" max="0.70" step="0.01" value="0.16"><span class="value" id="syv"></span></label>
+      <label>sz <input id="sz" type="range" min="0.04" max="0.70" step="0.01" value="0.10"><span class="value" id="szv"></span></label>
+      <label>alpha <input id="alpha" type="range" min="0.01" max="1.00" step="0.01" value="0.45"><span class="value" id="alphav"></span></label>
+    </div>
+
+    <div class="section">
+      <h2>Gaussian rotation q</h2>
+      <label>axis x <input id="ax" type="range" min="-1" max="1" step="0.01" value="0.2"><span class="value" id="axv"></span></label>
+      <label>axis y <input id="ay" type="range" min="-1" max="1" step="0.01" value="1.0"><span class="value" id="ayv"></span></label>
+      <label>axis z <input id="az" type="range" min="-1" max="1" step="0.01" value="0.2"><span class="value" id="azv"></span></label>
+      <label>angle <input id="angle" type="range" min="0" max="180" step="1" value="55"><span class="value" id="anglev"></span></label>
+      <button id="identity">Reset q = identity</button>
+    </div>
+
+    <div class="section">
+      <h2>Render camera</h2>
+      <label>yaw <input id="camYaw" type="range" min="-75" max="75" step="1" value="0"><span class="value" id="camYawv"></span></label>
+      <label>pitch <input id="camPitch" type="range" min="-45" max="45" step="1" value="0"><span class="value" id="camPitchv"></span></label>
+      <label>focal <input id="focal" type="range" min="120" max="760" step="10" value="360"><span class="value" id="focalv"></span></label>
+      <div class="small">
+        Camera angle changes W, so the 3D covariance becomes camera-space covariance before projection.
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Projection result</h2>
+      <div class="box">
+        <div><span class="pill">μ camera</span> <span class="mono" id="muCamText"></span></div>
+        <div><span class="pill">μ 2D</span> <span class="mono" id="mu2dText"></span></div>
+        <div><span class="pill">q</span> <span class="mono" id="quatText"></span></div>
+        <div><span class="pill">Σ′</span> <span class="mono" id="sigma2dText"></span></div>
+        <div><span class="pill">ellipse</span> <span class="mono" id="ellipseText"></span></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Formula</h2>
+      <div class="box formula">
+        Σ = R S Sᵀ Rᵀ<br>
+        Σ<sub>camera</sub> = W Σ Wᵀ<br>
+        Σ′ = J Σ<sub>camera</sub> Jᵀ<br>
+        G<sub>2D</sub>(p) = exp(-½(p - μ′)ᵀΣ′⁻¹(p - μ′))
+      </div>
+    </div>
+  </aside>
+</main>
+
+<script>
+const c3 = document.getElementById("canvas3d");
+const c2 = document.getElementById("canvas2d");
+const ctx3 = c3.getContext("2d");
+const ctx2 = c2.getContext("2d");
+
+const ids = [
+  "mux","muy","muz","sx","sy","sz","alpha",
+  "ax","ay","az","angle","camYaw","camPitch","focal"
+];
+const el = Object.fromEntries(ids.map(id => [id, document.getElementById(id)]));
+
+let viewYaw = -0.65;
+let viewPitch = 0.30;
+let dragging = false;
+let lastMouse = null;
+
+function fmt(v, n=3) { return Number(v).toFixed(n); }
+function rad(d) { return d * Math.PI / 180; }
+
+function normalize(v) {
+  const l = Math.hypot(v[0], v[1], v[2]);
+  if (l < 1e-8) return [1,0,0];
+  return [v[0]/l, v[1]/l, v[2]/l];
+}
+
+function quatFromAxisAngle(axis, angleDeg) {
+  const a = normalize(axis);
+  const h = rad(angleDeg) / 2;
+  const s = Math.sin(h);
+  return [Math.cos(h), a[0]*s, a[1]*s, a[2]*s];
+}
+
+function quatToMat3(q) {
+  const [w,x,y,z] = q;
+  return [
+    [1 - 2*y*y - 2*z*z, 2*x*y - 2*w*z,     2*x*z + 2*w*y],
+    [2*x*y + 2*w*z,     1 - 2*x*x - 2*z*z, 2*y*z - 2*w*x],
+    [2*x*z - 2*w*y,     2*y*z + 2*w*x,     1 - 2*x*x - 2*y*y]
+  ];
+}
+
+function matVec(M, v) {
+  return [
+    M[0][0]*v[0] + M[0][1]*v[1] + M[0][2]*v[2],
+    M[1][0]*v[0] + M[1][1]*v[1] + M[1][2]*v[2],
+    M[2][0]*v[0] + M[2][1]*v[1] + M[2][2]*v[2]
+  ];
+}
+
+function transpose(M) {
+  // Generic transpose: works for 3x3 matrices and also for J, which is 2x3.
+  // The previous version assumed every matrix had exactly 3 rows, so
+  // transpose(J) crashed because J[2] does not exist.
+  const rows = M.length;
+  const cols = M[0].length;
+  const T = Array.from({ length: cols }, () => Array(rows).fill(0));
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      T[c][r] = M[r][c];
+    }
+  }
+  return T;
+}
+
+function matMul(A, B) {
+  const R = Array.from({length:A.length}, () => Array(B[0].length).fill(0));
+  for (let i=0; i<A.length; i++) {
+    for (let j=0; j<B[0].length; j++) {
+      for (let k=0; k<B.length; k++) R[i][j] += A[i][k] * B[k][j];
+    }
+  }
+  return R;
+}
+
+function diag3(a,b,c) {
+  return [[a,0,0],[0,b,0],[0,0,c]];
+}
+
+function covWorld(R, s) {
+  const D = diag3(s[0]*s[0], s[1]*s[1], s[2]*s[2]);
+  return matMul(matMul(R, D), transpose(R));
+}
+
+function rotY(a) {
+  const c = Math.cos(a), s = Math.sin(a);
+  return [[c,0,s],[0,1,0],[-s,0,c]];
+}
+function rotX(a) {
+  const c = Math.cos(a), s = Math.sin(a);
+  return [[1,0,0],[0,c,-s],[0,s,c]];
+}
+
+function camToWorldFromYawPitch(yawDeg, pitchDeg) {
+  return matMul(rotY(rad(yawDeg)), rotX(rad(pitchDeg)));
+}
+
+function worldToCameraFromYawPitch(yawDeg, pitchDeg) {
+  return transpose(camToWorldFromYawPitch(yawDeg, pitchDeg));
+}
+
+function viewerMatrix() {
+  return matMul(rotX(viewPitch), rotY(viewYaw));
+}
+
+function projectViewer(p) {
+  const rect = c3.getBoundingClientRect();
+  const V = viewerMatrix();
+  let pc = matVec(V, [p[0], p[1]-0.2, p[2]-1.7]);
+  pc[2] += 5.0;
+  const f = Math.min(rect.width, rect.height) * 0.95;
+  return [rect.width/2 + f*pc[0]/pc[2], rect.height/2 - f*pc[1]/pc[2], pc[2]];
+}
+
+function line3(a,b,color,width=2) {
+  const pa = projectViewer(a), pb = projectViewer(b);
+  ctx3.strokeStyle = color;
+  ctx3.lineWidth = width;
+  ctx3.beginPath();
+  ctx3.moveTo(pa[0],pa[1]);
+  ctx3.lineTo(pb[0],pb[1]);
+  ctx3.stroke();
+}
+
+function dot3(p,color,r=5) {
+  const pp = projectViewer(p);
+  ctx3.fillStyle = color;
+  ctx3.beginPath();
+  ctx3.arc(pp[0],pp[1],r,0,Math.PI*2);
+  ctx3.fill();
+  ctx3.strokeStyle = "rgba(255,255,255,0.78)";
+  ctx3.lineWidth = 1;
+  ctx3.stroke();
+}
+
+function drawGrid() {
+  for (let i=-12; i<=12; i++) {
+    line3([-1.8,-0.8,1.0+i*0.13], [1.8,-0.8,1.0+i*0.13], "rgba(148, 163, 184, 0.12)", 1);
+    line3([i*0.15,-0.8,0.6], [i*0.15,-0.8,4.2], "rgba(148, 163, 184, 0.12)", 1);
+  }
+}
+
+function ellipsoidPoint(mu, R, s, theta, phi) {
+  const x = Math.cos(theta) * Math.sin(phi) * s[0];
+  const y = Math.sin(theta) * Math.sin(phi) * s[1];
+  const z = Math.cos(phi) * s[2];
+  const p = matVec(R, [x,y,z]);
+  return [mu[0]+p[0], mu[1]+p[1], mu[2]+p[2]];
+}
+
+function drawEllipsoid3D(mu, R, s) {
+  const latN = 18, lonN = 36;
+  const paths = [];
+  for (let i=1; i<latN; i++) {
+    const phi = Math.PI * i / latN;
+    const pts = [];
+    let depth = 0;
+    for (let j=0; j<=lonN; j++) {
+      const theta = 2*Math.PI*j/lonN;
+      const pp = projectViewer(ellipsoidPoint(mu,R,s,theta,phi));
+      pts.push(pp);
+      depth += pp[2];
+    }
+    paths.push({pts, depth: depth/pts.length, kind: "lat"});
+  }
+  for (let j=0; j<lonN; j+=2) {
+    const theta = 2*Math.PI*j/lonN;
+    const pts = [];
+    let depth = 0;
+    for (let i=0; i<=latN; i++) {
+      const phi = Math.PI * i / latN;
+      const pp = projectViewer(ellipsoidPoint(mu,R,s,theta,phi));
+      pts.push(pp);
+      depth += pp[2];
+    }
+    paths.push({pts, depth: depth/pts.length, kind: "lon"});
+  }
+  paths.sort((a,b)=>b.depth-a.depth);
+  for (const path of paths) {
+    ctx3.strokeStyle = path.kind === "lat" ? "rgba(125, 211, 252, 0.42)" : "rgba(186, 230, 253, 0.24)";
+    ctx3.lineWidth = 1.2;
+    ctx3.beginPath();
+    ctx3.moveTo(path.pts[0][0], path.pts[0][1]);
+    for (const p of path.pts.slice(1)) ctx3.lineTo(p[0], p[1]);
+    ctx3.stroke();
+  }
+  dot3(mu, "#e0f2fe", 5);
+}
+
+function drawCameraFrustum(yawDeg, pitchDeg, focal, imageW, imageH) {
+  const C = [0,0,0];
+  const Rcw = camToWorldFromYawPitch(yawDeg, pitchDeg);
+  const zPlane = 0.85;
+  const halfW = imageW/(2*focal)*zPlane;
+  const halfH = imageH/(2*focal)*zPlane;
+
+  const cornersLocal = [
+    [-halfW, -halfH, zPlane],
+    [ halfW, -halfH, zPlane],
+    [ halfW,  halfH, zPlane],
+    [-halfW,  halfH, zPlane]
+  ];
+  const corners = cornersLocal.map(p => matVec(Rcw, p));
+  const center = matVec(Rcw, [0,0,zPlane]);
+
+  // frustum
+  for (const p of corners) line3(C, p, "rgba(250, 204, 21, 0.55)", 1.5);
+  for (let i=0;i<4;i++) line3(corners[i], corners[(i+1)%4], "rgba(250, 204, 21, 0.9)", 2);
+  line3(C, center, "rgba(250, 204, 21, 0.65)", 2);
+  dot3(C, "#facc15", 5);
+}
+
+function eigen2x2(M) {
+  const a = M[0][0], b = M[0][1], c = M[1][1];
+  const tr = a + c;
+  const det = a*c - b*b;
+  const d = Math.sqrt(Math.max(0, tr*tr/4 - det));
+  let l1 = tr/2 + d;
+  let l2 = tr/2 - d;
+  l1 = Math.max(l1, 1e-9);
+  l2 = Math.max(l2, 1e-9);
+  const angle = 0.5 * Math.atan2(2*b, a-c);
+  return {l1, l2, angle};
+}
+
+function invert2(M) {
+  const a = M[0][0], b = M[0][1], c = M[1][0], d = M[1][1];
+  const det = a*d - b*c;
+  if (Math.abs(det) < 1e-9) return [[1e9,0],[0,1e9]];
+  return [[d/det, -b/det],[-c/det, a/det]];
+}
+
+function renderSplat2D(mu2, S2, alpha) {
+  const rect = c2.getBoundingClientRect();
+  const w = Math.floor(rect.width), h = Math.floor(rect.height);
+  ctx2.clearRect(0,0,w,h);
+
+  // background grid
+  ctx2.fillStyle = "#020617";
+  ctx2.fillRect(0,0,w,h);
+  ctx2.strokeStyle = "rgba(148, 163, 184, 0.11)";
+  ctx2.lineWidth = 1;
+  for (let x=0; x<w; x+=32) { ctx2.beginPath(); ctx2.moveTo(x,0); ctx2.lineTo(x,h); ctx2.stroke(); }
+  for (let y=0; y<h; y+=32) { ctx2.beginPath(); ctx2.moveTo(0,y); ctx2.lineTo(w,y); ctx2.stroke(); }
+
+  const inv = invert2(S2);
+  const eig = eigen2x2(S2);
+  const maxStd = Math.sqrt(Math.max(eig.l1, eig.l2));
+  const bound = Math.ceil(3.5 * maxStd);
+  const x0 = Math.max(0, Math.floor(mu2[0] - bound));
+  const x1 = Math.min(w-1, Math.ceil(mu2[0] + bound));
+  const y0 = Math.max(0, Math.floor(mu2[1] - bound));
+  const y1 = Math.min(h-1, Math.ceil(mu2[1] + bound));
+
+  const img = ctx2.getImageData(0,0,w,h);
+  const data = img.data;
+
+  // Draw a warm Gaussian splat over the dark image.
+  for (let y=y0; y<=y1; y++) {
+    for (let x=x0; x<=x1; x++) {
+      const dx = x - mu2[0];
+      const dy = y - mu2[1];
+      const m2 = dx*(inv[0][0]*dx + inv[0][1]*dy) + dy*(inv[1][0]*dx + inv[1][1]*dy);
+      if (m2 > 14.0) continue;
+      const g = Math.exp(-0.5*m2);
+      const a = alpha * g;
+      const idx = (y*w + x)*4;
+      const sr = 180, sg = 120, sb = 60;
+      data[idx] = Math.round(data[idx]*(1-a) + sr*a);
+      data[idx+1] = Math.round(data[idx+1]*(1-a) + sg*a);
+      data[idx+2] = Math.round(data[idx+2]*(1-a) + sb*a);
+      data[idx+3] = 255;
+    }
+  }
+  ctx2.putImageData(img,0,0);
+
+  // camera/image center crosshair
+  ctx2.strokeStyle = "rgba(148, 163, 184, 0.30)";
+  ctx2.lineWidth = 1;
+  ctx2.beginPath();
+  ctx2.moveTo(w/2, 0); ctx2.lineTo(w/2, h);
+  ctx2.moveTo(0, h/2); ctx2.lineTo(w, h/2);
+  ctx2.stroke();
+
+  // Draw 1,2,3 sigma ellipses.
+  ctx2.save();
+  ctx2.translate(mu2[0], mu2[1]);
+  ctx2.rotate(eig.angle);
+  for (const k of [3,2,1]) {
+    ctx2.strokeStyle = k === 1 ? "rgba(255,255,255,0.95)" : k === 2 ? "rgba(186,230,253,0.75)" : "rgba(125,211,252,0.45)";
+    ctx2.lineWidth = k === 1 ? 2.2 : 1.4;
+    ctx2.beginPath();
+    ctx2.ellipse(0,0,k*Math.sqrt(eig.l1),k*Math.sqrt(eig.l2),0,0,Math.PI*2);
+    ctx2.stroke();
+  }
+  ctx2.restore();
+
+  ctx2.fillStyle = "#f8fafc";
+  ctx2.beginPath();
+  ctx2.arc(mu2[0], mu2[1], 4.5, 0, Math.PI*2);
+  ctx2.fill();
+
+  // labels
+  ctx2.fillStyle = "rgba(226, 232, 240, 0.92)";
+  ctx2.font = "12px ui-monospace, monospace";
+  ctx2.fillText("image center", w/2 + 8, h/2 - 8);
+  ctx2.fillText("μ′", mu2[0] + 8, mu2[1] - 8);
+
+  return eig;
+}
+
+function computeProjection(mu, SigmaWorld, yawDeg, pitchDeg, focal, imageW, imageH) {
+  const W = worldToCameraFromYawPitch(yawDeg, pitchDeg);
+  const muCam = matVec(W, mu);
+  const SigmaCam = matMul(matMul(W, SigmaWorld), transpose(W));
+  const X = muCam[0], Y = muCam[1], Z = Math.max(muCam[2], 0.05);
+
+  const cx = imageW/2, cy = imageH/2;
+  const mu2 = [focal * X/Z + cx, -focal * Y/Z + cy];
+
+  const J = [
+    [focal/Z, 0, -focal*X/(Z*Z)],
+    [0, -focal/Z, focal*Y/(Z*Z)]
+  ];
+
+  const Sigma2 = matMul(matMul(J, SigmaCam), transpose(J));
+  Sigma2[0][0] += 0.35;
+  Sigma2[1][1] += 0.35;
+
+  return {muCam, mu2, Sigma2};
+}
+
+function draw3D() {
+  const rect = c3.getBoundingClientRect();
+  ctx3.clearRect(0,0,rect.width,rect.height);
+  drawGrid();
+
+  const params = readParams();
+  drawCameraFrustum(params.camYaw, params.camPitch, params.focal, c2.getBoundingClientRect().width, c2.getBoundingClientRect().height);
+  drawEllipsoid3D(params.mu, params.Rg, params.s);
+
+  // Gaussian local axes
+  const axisLen = Math.max(...params.s) * 1.55;
+  const ex = matVec(params.Rg, [axisLen,0,0]).map((v,i)=>v+params.mu[i]);
+  const ey = matVec(params.Rg, [0,axisLen,0]).map((v,i)=>v+params.mu[i]);
+  const ez = matVec(params.Rg, [0,0,axisLen]).map((v,i)=>v+params.mu[i]);
+  line3(params.mu, ex, "#fb7185", 4);
+  line3(params.mu, ey, "#4ade80", 4);
+  line3(params.mu, ez, "#60a5fa", 4);
+
+  // line from render camera to Gaussian
+  line3([0,0,0], params.mu, "rgba(251, 146, 60, 0.70)", 2);
+}
+
+function readParams() {
+  const mu = [parseFloat(el.mux.value), parseFloat(el.muy.value), parseFloat(el.muz.value)];
+  const s = [parseFloat(el.sx.value), parseFloat(el.sy.value), parseFloat(el.sz.value)];
+  const axis = [parseFloat(el.ax.value), parseFloat(el.ay.value), parseFloat(el.az.value)];
+  const angle = parseFloat(el.angle.value);
+  const q = quatFromAxisAngle(axis, angle);
+  const Rg = quatToMat3(q);
+  const alpha = parseFloat(el.alpha.value);
+  const camYaw = parseFloat(el.camYaw.value);
+  const camPitch = parseFloat(el.camPitch.value);
+  const focal = parseFloat(el.focal.value);
+  const SigmaW = covWorld(Rg, s);
+  return {mu, s, axis, angle, q, Rg, alpha, camYaw, camPitch, focal, SigmaW};
+}
+
+function updateReadouts(params, proj, eig) {
+  const map = {
+    mux: fmt(params.mu[0],2), muy: fmt(params.mu[1],2), muz: fmt(params.mu[2],2),
+    sx: fmt(params.s[0],2), sy: fmt(params.s[1],2), sz: fmt(params.s[2],2),
+    alpha: fmt(params.alpha,2),
+    ax: fmt(params.axis[0],2), ay: fmt(params.axis[1],2), az: fmt(params.axis[2],2),
+    angle: fmt(params.angle,0) + "°",
+    camYaw: fmt(params.camYaw,0) + "°",
+    camPitch: fmt(params.camPitch,0) + "°",
+    focal: fmt(params.focal,0)
+  };
+  for (const [k,v] of Object.entries(map)) {
+    const node = document.getElementById(k + "v");
+    if (node) node.textContent = v;
+  }
+
+  document.getElementById("muCamText").textContent =
+    `(${fmt(proj.muCam[0])}, ${fmt(proj.muCam[1])}, ${fmt(proj.muCam[2])})`;
+
+  document.getElementById("mu2dText").textContent =
+    `(${fmt(proj.mu2[0],1)} px, ${fmt(proj.mu2[1],1)} px)`;
+
+  document.getElementById("quatText").textContent =
+    `(${fmt(params.q[0])}, ${fmt(params.q[1])}, ${fmt(params.q[2])}, ${fmt(params.q[3])})`;
+
+  document.getElementById("sigma2dText").textContent =
+    `[[${fmt(proj.Sigma2[0][0],1)}, ${fmt(proj.Sigma2[0][1],1)}], [${fmt(proj.Sigma2[1][0],1)}, ${fmt(proj.Sigma2[1][1],1)}]]`;
+
+  document.getElementById("ellipseText").textContent =
+    `1σ axes ≈ ${fmt(Math.sqrt(eig.l1),1)} px × ${fmt(Math.sqrt(eig.l2),1)} px, angle ${fmt(eig.angle*180/Math.PI,1)}°`;
+}
+
+function drawAll() {
+  const params = readParams();
+  const rect2 = c2.getBoundingClientRect();
+  const proj = computeProjection(params.mu, params.SigmaW, params.camYaw, params.camPitch, params.focal, rect2.width, rect2.height);
+  draw3D();
+  const eig = renderSplat2D(proj.mu2, proj.Sigma2, params.alpha);
+  updateReadouts(params, proj, eig);
+}
+
+function resizeCanvas(canvas) {
+  const dpr = Math.max(1, window.devicePixelRatio || 1);
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = Math.floor(rect.width * dpr);
+  canvas.height = Math.floor(rect.height * dpr);
+  const ctx = canvas.getContext("2d");
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+}
+
+function resize() {
+  resizeCanvas(c3);
+  resizeCanvas(c2);
+  drawAll();
+}
+
+window.addEventListener("resize", resize);
+for (const id of ids) el[id].addEventListener("input", drawAll);
+
+document.getElementById("identity").addEventListener("click", () => {
+  el.ax.value = 1;
+  el.ay.value = 0;
+  el.az.value = 0;
+  el.angle.value = 0;
+  drawAll();
+});
+
+c3.addEventListener("mousedown", e => {
+  dragging = true;
+  lastMouse = [e.clientX, e.clientY];
+});
+window.addEventListener("mouseup", () => dragging = false);
+window.addEventListener("mousemove", e => {
+  if (!dragging) return;
+  const dx = e.clientX - lastMouse[0];
+  const dy = e.clientY - lastMouse[1];
+  lastMouse = [e.clientX, e.clientY];
+  viewYaw += dx * 0.008;
+  viewPitch += dy * 0.008;
+  viewPitch = Math.max(-1.25, Math.min(1.25, viewPitch));
+  drawAll();
+});
+
+c3.addEventListener("touchstart", e => {
+  if (e.touches.length === 1) {
+    dragging = true;
+    lastMouse = [e.touches[0].clientX, e.touches[0].clientY];
+  }
+}, {passive:true});
+
+window.addEventListener("touchend", () => dragging = false);
+
+c3.addEventListener("touchmove", e => {
+  if (!dragging || e.touches.length !== 1) return;
+  const dx = e.touches[0].clientX - lastMouse[0];
+  const dy = e.touches[0].clientY - lastMouse[1];
+  lastMouse = [e.touches[0].clientX, e.touches[0].clientY];
+  viewYaw += dx * 0.008;
+  viewPitch += dy * 0.008;
+  viewPitch = Math.max(-1.25, Math.min(1.25, viewPitch));
+  drawAll();
+}, {passive:true});
+
+resize();
+</script>
+</body>
+</html>

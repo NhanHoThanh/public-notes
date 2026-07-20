@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>3D Gaussian + Rotation Quaternion Visualization</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --panel: #111827;
+    --panel2: #1f2937;
+    --text: #e5e7eb;
+    --muted: #9ca3af;
+    --accent: #38bdf8;
+    --grid: rgba(148, 163, 184, 0.22);
+    --red: #fb7185;
+    --green: #4ade80;
+    --blue: #60a5fa;
+    --orange: #f59e0b;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: radial-gradient(circle at top, #1e293b, #020617 70%);
+    color: var(--text);
+  }
+
+  header {
+    padding: 20px 24px 10px;
+  }
+
+  h1 {
+    margin: 0 0 6px;
+    font-size: 24px;
+    font-weight: 750;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .wrap {
+    display: grid;
+    grid-template-columns: minmax(420px, 1fr) 390px;
+    gap: 18px;
+    padding: 14px 24px 24px;
+  }
+
+  .card {
+    background: rgba(17, 24, 39, 0.88);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 18px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+    overflow: hidden;
+  }
+
+  #viewportCard {
+    position: relative;
+    min-height: 620px;
+  }
+
+  canvas {
+    display: block;
+    width: 100%;
+    height: 620px;
+    background:
+      linear-gradient(rgba(148, 163, 184, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(148, 163, 184, 0.06) 1px, transparent 1px),
+      radial-gradient(circle at center, rgba(56, 189, 248, 0.08), transparent 55%),
+      #020617;
+    background-size: 32px 32px, 32px 32px, auto, auto;
+    cursor: grab;
+  }
+
+  canvas:active { cursor: grabbing; }
+
+  .legend {
+    position: absolute;
+    left: 14px;
+    top: 14px;
+    background: rgba(2, 6, 23, 0.75);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 12px;
+    padding: 10px 12px;
+    font-size: 12px;
+    color: var(--muted);
+    backdrop-filter: blur(8px);
+  }
+
+  .legend div { margin: 4px 0; }
+  .dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 7px;
+    vertical-align: -1px;
+  }
+
+  .panel {
+    padding: 18px;
+  }
+
+  .section {
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+  }
+
+  .section:first-child { padding-top: 0; }
+  .section:last-child { border-bottom: none; }
+
+  h2 {
+    font-size: 15px;
+    margin: 0 0 12px;
+    color: #f8fafc;
+  }
+
+  label {
+    display: grid;
+    grid-template-columns: 76px 1fr 58px;
+    gap: 10px;
+    align-items: center;
+    font-size: 13px;
+    color: var(--muted);
+    margin: 10px 0;
+  }
+
+  input[type="range"] {
+    width: 100%;
+    accent-color: var(--accent);
+  }
+
+  .value {
+    text-align: right;
+    color: #f8fafc;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .box {
+    background: rgba(31, 41, 55, 0.8);
+    border: 1px solid rgba(148, 163, 184, 0.14);
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  code, .mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    color: #dbeafe;
+  }
+
+  .formula {
+    font-size: 14px;
+    line-height: 1.65;
+    color: #e0f2fe;
+  }
+
+  .small {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  .pill {
+    display: inline-block;
+    padding: 3px 7px;
+    border-radius: 999px;
+    background: rgba(56, 189, 248, 0.12);
+    color: #bae6fd;
+    font-size: 12px;
+    margin: 2px 4px 2px 0;
+  }
+
+  button {
+    border: none;
+    color: white;
+    background: linear-gradient(135deg, #0284c7, #2563eb);
+    padding: 10px 12px;
+    border-radius: 12px;
+    font-weight: 650;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  button:hover { filter: brightness(1.08); }
+
+  @media (max-width: 900px) {
+    .wrap {
+      grid-template-columns: 1fr;
+      padding: 12px;
+    }
+    header { padding: 18px 14px 6px; }
+    canvas { height: 520px; }
+    #viewportCard { min-height: 520px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>3D Gaussian + Rotation Quaternion</h1>
+  <div class="subtitle">
+    Interactive view of one 3D Gaussian from Gaussian Splatting. The scale vector creates an ellipsoid, and the quaternion rotates it in 3D.
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="card" id="viewportCard">
+    <canvas id="canvas"></canvas>
+    <div class="legend">
+      <div><span class="dot" style="background:var(--red)"></span>local X axis after quaternion rotation</div>
+      <div><span class="dot" style="background:var(--green)"></span>local Y axis after quaternion rotation</div>
+      <div><span class="dot" style="background:var(--blue)"></span>local Z axis after quaternion rotation</div>
+      <div><span class="dot" style="background:var(--orange)"></span>query point x for G(x)</div>
+      <div>Drag the canvas to rotate the camera.</div>
+    </div>
+  </section>
+
+  <aside class="card panel">
+    <div class="section">
+      <h2>Gaussian parameters</h2>
+      <div class="box">
+        <div><span class="pill">μ</span> <span class="mono" id="muText"></span></div>
+        <div><span class="pill">s</span> <span class="mono" id="scaleText"></span></div>
+        <div><span class="pill">q</span> <span class="mono" id="quatText"></span></div>
+        <div><span class="pill">α</span> <span class="mono" id="alphaText"></span></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Scale</h2>
+      <label>sx <input id="sx" type="range" min="0.04" max="0.70" step="0.01" value="0.35"><span class="value" id="sxv"></span></label>
+      <label>sy <input id="sy" type="range" min="0.04" max="0.70" step="0.01" value="0.16"><span class="value" id="syv"></span></label>
+      <label>sz <input id="sz" type="range" min="0.04" max="0.70" step="0.01" value="0.10"><span class="value" id="szv"></span></label>
+    </div>
+
+    <div class="section">
+      <h2>Rotation quaternion from axis + angle</h2>
+      <label>axis x <input id="ax" type="range" min="-1" max="1" step="0.01" value="0.2"><span class="value" id="axv"></span></label>
+      <label>axis y <input id="ay" type="range" min="-1" max="1" step="0.01" value="1.0"><span class="value" id="ayv"></span></label>
+      <label>axis z <input id="az" type="range" min="-1" max="1" step="0.01" value="0.2"><span class="value" id="azv"></span></label>
+      <label>angle <input id="angle" type="range" min="0" max="180" step="1" value="55"><span class="value" id="anglev"></span></label>
+      <button id="identity">Reset to identity quaternion</button>
+      <div class="small" style="margin-top:10px;">
+        q = (cos(θ/2), axis × sin(θ/2)). Identity rotation is q = (1, 0, 0, 0).
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Evaluate spatial Gaussian</h2>
+      <label>dx <input id="dx" type="range" min="-0.8" max="0.8" step="0.01" value="0.35"><span class="value" id="dxv"></span></label>
+      <label>dy <input id="dy" type="range" min="-0.8" max="0.8" step="0.01" value="0.06"><span class="value" id="dyv"></span></label>
+      <label>dz <input id="dz" type="range" min="-0.8" max="0.8" step="0.01" value="0.00"><span class="value" id="dzv"></span></label>
+      <label>alpha <input id="alpha" type="range" min="0.01" max="1.00" step="0.01" value="0.10"><span class="value" id="alphav"></span></label>
+      <div class="box formula">
+        G(x) = exp(-½(x - μ)<sup>T</sup>Σ<sup>-1</sup>(x - μ))<br>
+        <span class="mono" id="gText"></span><br>
+        <span class="mono" id="agText"></span>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>What you are seeing</h2>
+      <div class="small">
+        The ellipsoid is the 1σ shape implied by Σ = R S S<sup>T</sup> R<sup>T</sup>.
+        The quaternion q becomes the rotation matrix R. When q changes, the Gaussian
+        does not move; only its orientation changes.
+      </div>
+    </div>
+  </aside>
+</main>
+
+<script>
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+const ids = ["sx","sy","sz","ax","ay","az","angle","dx","dy","dz","alpha"];
+const el = Object.fromEntries(ids.map(id => [id, document.getElementById(id)]));
+const mu = [0, 0, 0];
+
+let cameraYaw = -0.62;
+let cameraPitch = 0.34;
+let dragging = false;
+let lastMouse = null;
+
+function resize() {
+  const dpr = Math.max(1, window.devicePixelRatio || 1);
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = Math.floor(rect.width * dpr);
+  canvas.height = Math.floor(rect.height * dpr);
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  draw();
+}
+
+window.addEventListener("resize", resize);
+
+canvas.addEventListener("mousedown", e => {
+  dragging = true;
+  lastMouse = [e.clientX, e.clientY];
+});
+window.addEventListener("mouseup", () => dragging = false);
+window.addEventListener("mousemove", e => {
+  if (!dragging) return;
+  const dx = e.clientX - lastMouse[0];
+  const dy = e.clientY - lastMouse[1];
+  lastMouse = [e.clientX, e.clientY];
+  cameraYaw += dx * 0.008;
+  cameraPitch += dy * 0.008;
+  cameraPitch = Math.max(-1.25, Math.min(1.25, cameraPitch));
+  draw();
+});
+
+canvas.addEventListener("touchstart", e => {
+  if (e.touches.length === 1) {
+    dragging = true;
+    lastMouse = [e.touches[0].clientX, e.touches[0].clientY];
+  }
+}, {passive: true});
+
+canvas.addEventListener("touchend", () => dragging = false);
+
+canvas.addEventListener("touchmove", e => {
+  if (!dragging || e.touches.length !== 1) return;
+  const dx = e.touches[0].clientX - lastMouse[0];
+  const dy = e.touches[0].clientY - lastMouse[1];
+  lastMouse = [e.touches[0].clientX, e.touches[0].clientY];
+  cameraYaw += dx * 0.008;
+  cameraPitch += dy * 0.008;
+  cameraPitch = Math.max(-1.25, Math.min(1.25, cameraPitch));
+  draw();
+}, {passive: true});
+
+for (const id of ids) el[id].addEventListener("input", draw);
+
+document.getElementById("identity").addEventListener("click", () => {
+  el.ax.value = 1;
+  el.ay.value = 0;
+  el.az.value = 0;
+  el.angle.value = 0;
+  draw();
+});
+
+function fmt(v, n=3) {
+  return Number(v).toFixed(n);
+}
+
+function normalize(v) {
+  const len = Math.hypot(v[0], v[1], v[2]);
+  if (len < 1e-8) return [1,0,0];
+  return [v[0]/len, v[1]/len, v[2]/len];
+}
+
+function quatFromAxisAngle(axis, angleDeg) {
+  const a = normalize(axis);
+  const theta = angleDeg * Math.PI / 180;
+  const half = theta / 2;
+  const s = Math.sin(half);
+  return [Math.cos(half), a[0]*s, a[1]*s, a[2]*s];
+}
+
+function quatToMat3(q) {
+  const [w,x,y,z] = q;
+  return [
+    [1 - 2*y*y - 2*z*z, 2*x*y - 2*w*z,     2*x*z + 2*w*y],
+    [2*x*y + 2*w*z,     1 - 2*x*x - 2*z*z, 2*y*z - 2*w*x],
+    [2*x*z - 2*w*y,     2*y*z + 2*w*x,     1 - 2*x*x - 2*y*y]
+  ];
+}
+
+function matVec(M, v) {
+  return [
+    M[0][0]*v[0] + M[0][1]*v[1] + M[0][2]*v[2],
+    M[1][0]*v[0] + M[1][1]*v[1] + M[1][2]*v[2],
+    M[2][0]*v[0] + M[2][1]*v[1] + M[2][2]*v[2],
+  ];
+}
+
+function transpose(M) {
+  return [
+    [M[0][0], M[1][0], M[2][0]],
+    [M[0][1], M[1][1], M[2][1]],
+    [M[0][2], M[1][2], M[2][2]]
+  ];
+}
+
+function makeCameraMatrix() {
+  const cy = Math.cos(cameraYaw), sy = Math.sin(cameraYaw);
+  const cp = Math.cos(cameraPitch), sp = Math.sin(cameraPitch);
+  const Ry = [
+    [cy, 0, sy],
+    [0, 1, 0],
+    [-sy, 0, cy]
+  ];
+  const Rx = [
+    [1, 0, 0],
+    [0, cp, -sp],
+    [0, sp, cp]
+  ];
+  return [
+    [
+      Rx[0][0]*Ry[0][0] + Rx[0][1]*Ry[1][0] + Rx[0][2]*Ry[2][0],
+      Rx[0][0]*Ry[0][1] + Rx[0][1]*Ry[1][1] + Rx[0][2]*Ry[2][1],
+      Rx[0][0]*Ry[0][2] + Rx[0][1]*Ry[1][2] + Rx[0][2]*Ry[2][2]
+    ],
+    [
+      Rx[1][0]*Ry[0][0] + Rx[1][1]*Ry[1][0] + Rx[1][2]*Ry[2][0],
+      Rx[1][0]*Ry[0][1] + Rx[1][1]*Ry[1][1] + Rx[1][2]*Ry[2][1],
+      Rx[1][0]*Ry[0][2] + Rx[1][1]*Ry[1][2] + Rx[1][2]*Ry[2][2]
+    ],
+    [
+      Rx[2][0]*Ry[0][0] + Rx[2][1]*Ry[1][0] + Rx[2][2]*Ry[2][0],
+      Rx[2][0]*Ry[0][1] + Rx[2][1]*Ry[1][1] + Rx[2][2]*Ry[2][1],
+      Rx[2][0]*Ry[0][2] + Rx[2][1]*Ry[1][2] + Rx[2][2]*Ry[2][2]
+    ]
+  ];
+}
+
+function project(p, w, h) {
+  const C = makeCameraMatrix();
+  let pc = matVec(C, p);
+  pc[2] += 3.0;
+  const f = Math.min(w, h) * 0.78;
+  return [
+    w/2 + f * pc[0] / pc[2],
+    h/2 - f * pc[1] / pc[2],
+    pc[2]
+  ];
+}
+
+function line3(a, b, color, width=2.5) {
+  const rect = canvas.getBoundingClientRect();
+  const pa = project(a, rect.width, rect.height);
+  const pb = project(b, rect.width, rect.height);
+  ctx.strokeStyle = color;
+  ctx.lineWidth = width;
+  ctx.beginPath();
+  ctx.moveTo(pa[0], pa[1]);
+  ctx.lineTo(pb[0], pb[1]);
+  ctx.stroke();
+}
+
+function dot3(p, color, radius=6) {
+  const rect = canvas.getBoundingClientRect();
+  const pp = project(p, rect.width, rect.height);
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.arc(pp[0], pp[1], radius, 0, Math.PI*2);
+  ctx.fill();
+  ctx.strokeStyle = "rgba(255,255,255,0.75)";
+  ctx.lineWidth = 1;
+  ctx.stroke();
+}
+
+function gaussianValue(dx, dy, dz, scale, R) {
+  // Compute local coordinates y = R^T (x - mu), then y_i / s_i.
+  const Rt = transpose(R);
+  const local = matVec(Rt, [dx, dy, dz]);
+  const m2 =
+    (local[0]*local[0])/(scale[0]*scale[0]) +
+    (local[1]*local[1])/(scale[1]*scale[1]) +
+    (local[2]*local[2])/(scale[2]*scale[2]);
+  return Math.exp(-0.5 * m2);
+}
+
+function drawEllipsoid(R, scale, alpha) {
+  const rect = canvas.getBoundingClientRect();
+  const latN = 18;
+  const lonN = 36;
+  const paths = [];
+
+  function spherePoint(theta, phi) {
+    const x = Math.cos(theta) * Math.sin(phi);
+    const y = Math.sin(theta) * Math.sin(phi);
+    const z = Math.cos(phi);
+    const local = [x * scale[0], y * scale[1], z * scale[2]];
+    return matVec(R, local);
+  }
+
+  for (let i=1; i<latN; i++) {
+    const phi = Math.PI * i / latN;
+    let pts = [];
+    let depth = 0;
+    for (let j=0; j<=lonN; j++) {
+      const theta = 2*Math.PI*j/lonN;
+      const p = spherePoint(theta, phi);
+      const pp = project(p, rect.width, rect.height);
+      pts.push(pp);
+      depth += pp[2];
+    }
+    paths.push({pts, depth: depth/pts.length, type: "lat"});
+  }
+
+  for (let j=0; j<lonN; j+=2) {
+    const theta = 2*Math.PI*j/lonN;
+    let pts = [];
+    let depth = 0;
+    for (let i=0; i<=latN; i++) {
+      const phi = Math.PI * i / latN;
+      const p = spherePoint(theta, phi);
+      const pp = project(p, rect.width, rect.height);
+      pts.push(pp);
+      depth += pp[2];
+    }
+    paths.push({pts, depth: depth/pts.length, type: "lon"});
+  }
+
+  paths.sort((a,b) => b.depth - a.depth);
+
+  // soft fill with projected contour approximated by many points
+  const fillPts = [];
+  for (let i=0; i<70; i++) {
+    const theta = 2*Math.PI*i/70;
+    const p = spherePoint(theta, Math.PI/2);
+    fillPts.push(project(p, rect.width, rect.height));
+  }
+
+  ctx.globalAlpha = 0.10 + 0.25 * alpha;
+  ctx.fillStyle = "rgb(56, 189, 248)";
+  ctx.beginPath();
+  ctx.moveTo(fillPts[0][0], fillPts[0][1]);
+  for (const p of fillPts.slice(1)) ctx.lineTo(p[0], p[1]);
+  ctx.closePath();
+  ctx.fill();
+  ctx.globalAlpha = 1;
+
+  for (const path of paths) {
+    ctx.strokeStyle = path.type === "lat"
+      ? "rgba(186, 230, 253, 0.34)"
+      : "rgba(125, 211, 252, 0.25)";
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.moveTo(path.pts[0][0], path.pts[0][1]);
+    for (const p of path.pts.slice(1)) ctx.lineTo(p[0], p[1]);
+    ctx.stroke();
+  }
+}
+
+function drawGroundGrid() {
+  for (let i = -10; i <= 10; i++) {
+    const a = [-1.2, -0.75, i*0.12];
+    const b = [1.2, -0.75, i*0.12];
+    line3(a,b,"rgba(148, 163, 184, 0.12)",1);
+    const c = [i*0.12, -0.75, -1.2];
+    const d = [i*0.12, -0.75, 1.2];
+    line3(c,d,"rgba(148, 163, 184, 0.12)",1);
+  }
+}
+
+function draw() {
+  const rect = canvas.getBoundingClientRect();
+  ctx.clearRect(0,0,rect.width,rect.height);
+
+  const scale = [parseFloat(el.sx.value), parseFloat(el.sy.value), parseFloat(el.sz.value)];
+  const axis = [parseFloat(el.ax.value), parseFloat(el.ay.value), parseFloat(el.az.value)];
+  const angle = parseFloat(el.angle.value);
+  const q = quatFromAxisAngle(axis, angle);
+  const R = quatToMat3(q);
+  const alpha = parseFloat(el.alpha.value);
+
+  drawGroundGrid();
+  drawEllipsoid(R, scale, alpha);
+
+  // local axes
+  const axisLength = Math.max(...scale) * 1.45;
+  const ex = matVec(R, [axisLength, 0, 0]);
+  const ey = matVec(R, [0, axisLength, 0]);
+  const ez = matVec(R, [0, 0, axisLength]);
+  line3([0,0,0], ex, "#fb7185", 4);
+  line3([0,0,0], ey, "#4ade80", 4);
+  line3([0,0,0], ez, "#60a5fa", 4);
+
+  // query point
+  const query = [parseFloat(el.dx.value), parseFloat(el.dy.value), parseFloat(el.dz.value)];
+  line3([0,0,0], query, "rgba(245, 158, 11, 0.58)", 2);
+  dot3(query, "#f59e0b", 6);
+
+  dot3([0,0,0], "#e0f2fe", 5);
+
+  // readouts
+  document.getElementById("sxv").textContent = fmt(scale[0],2);
+  document.getElementById("syv").textContent = fmt(scale[1],2);
+  document.getElementById("szv").textContent = fmt(scale[2],2);
+  document.getElementById("axv").textContent = fmt(axis[0],2);
+  document.getElementById("ayv").textContent = fmt(axis[1],2);
+  document.getElementById("azv").textContent = fmt(axis[2],2);
+  document.getElementById("anglev").textContent = fmt(angle,0) + "°";
+  document.getElementById("dxv").textContent = fmt(query[0],2);
+  document.getElementById("dyv").textContent = fmt(query[1],2);
+  document.getElementById("dzv").textContent = fmt(query[2],2);
+  document.getElementById("alphav").textContent = fmt(alpha,2);
+
+  const G = gaussianValue(query[0], query[1], query[2], scale, R);
+  document.getElementById("muText").textContent = "(0, 0, 0) for visualization";
+  document.getElementById("scaleText").textContent = `(${fmt(scale[0],2)}, ${fmt(scale[1],2)}, ${fmt(scale[2],2)})`;
+  document.getElementById("quatText").textContent = `(${fmt(q[0])}, ${fmt(q[1])}, ${fmt(q[2])}, ${fmt(q[3])})`;
+  document.getElementById("alphaText").textContent = fmt(alpha,2);
+  document.getElementById("gText").innerHTML = `G(x) = ${fmt(G,5)}`;
+  document.getElementById("agText").innerHTML = `α · G(x) = ${fmt(alpha * G,5)}`;
+}
+
+resize();
+</script>
+</body>
+</html>

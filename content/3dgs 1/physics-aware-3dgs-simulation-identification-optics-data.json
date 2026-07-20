@@ -1,0 +1,3979 @@
+{
+  "title": "Physics Awareness in 3D Gaussian Splatting: Simulation, Identification, and Physical Image Formation",
+  "cutoff": "2026-07-20",
+  "scope": "Strict Gaussian-splatting-centric mechanics, inverse identification and digital twins, learned physics/control, and physics-based image formation; first-public work families through the cutoff",
+  "search_method": {
+    "workflow": "Firecrawl research-papers discovery followed by primary arXiv, DOI, and publisher-record verification",
+    "query_families": [
+      "3D Gaussian Splatting physics simulation, MPM, FEM, PBD, SPH, spring-mass, mechanics",
+      "Gaussian Splatting deformable simulation, cloth, tissue, soft body, contact, collision",
+      "Gaussian Splatting fluid, granular material, fracture, thermomechanics",
+      "Gaussian Splatting system identification, inverse dynamics, stiffness, friction, density, force",
+      "Gaussian Splatting learned physics, world model, digital twin, robotics, intervention, control",
+      "3D Gaussian Splatting inverse rendering, BRDF, materials, lighting, relighting, shadows",
+      "Gaussian Splatting reflection, specular transport, global illumination, ray/path tracing",
+      "Gaussian Splatting transparency, refraction, glass, water, caustics, transmission",
+      "Gaussian Splatting participating media, scattering, underwater, spectral, thermal, radiative imaging",
+      "Gaussian Splatting camera formation, distortion, rolling shutter, blur, defocus, event sensors"
+    ],
+    "inclusion": "A technical work with a novel method/evaluation in which Gaussian splatting is structurally central to the physical state, inverse observation model, learned physical state, or image/sensor formation model",
+    "exclusion": "Generic dynamic reconstruction with only kinematic regularization; non-Gaussian roots; surveys, blogs, and vendor claims; generic enhancement where the Gaussian renderer is incidental",
+    "deduplication": "Preprint and venue versions merged as one work family; first-public year retained; titles and stable primary URLs normalized"
+  },
+  "notes": [
+    "Access-neutral novelty screen: publisher-only and paywalled records are eligible, but no paywall was bypassed.",
+    "E1 records support novelty/metadata only; detailed performance, metric, capability, and hardware figures use E2/E3 full-text records.",
+    "Novelty and hardware are independent axes. Hardware is transcribed only when recovered from primary evidence; no consumer-feasibility inference is made.",
+    "Counts describe this reproducible strict-scope corpus, not all publications worldwide. The 2026 count is partial through 20 July."
+  ],
+  "research_agenda": [
+    {
+      "rank": 1,
+      "label": "Joint visual–physical benchmark",
+      "gap_confidence": 5,
+      "student_feasibility": 4,
+      "rationale": "Current benchmarks isolate appearance, mechanics, optics, or control; none provides a common accounting boundary for geometry, parameters, interventions, contacts, and compute.",
+      "evidence_ids": [
+        "M001",
+        "M024",
+        "M026",
+        "O002",
+        "O021"
+      ]
+    },
+    {
+      "rank": 2,
+      "label": "Uncertainty-aware system identification",
+      "gap_confidence": 5,
+      "student_feasibility": 3,
+      "rationale": "Most inverse pipelines return one parameter vector even when geometry, excitation, force, lighting, and material variables are not uniquely observable.",
+      "evidence_ids": [
+        "M036",
+        "M047",
+        "M052",
+        "O002"
+      ]
+    },
+    {
+      "rank": 3,
+      "label": "Contact and topology validation",
+      "gap_confidence": 5,
+      "student_feasibility": 3,
+      "rationale": "Collision, fracture, cutting, and tearing are common demonstrations, but measured contact timing, penetration, impulses, and topology consistency remain rare.",
+      "evidence_ids": [
+        "M001",
+        "M024",
+        "M034",
+        "M057"
+      ]
+    },
+    {
+      "rank": 4,
+      "label": "Physics-state compression",
+      "gap_confidence": 5,
+      "student_feasibility": 4,
+      "rationale": "Existing physics-aware assets report compute but do not jointly rate–distortion code velocity, stress, material parameters, contacts, uncertainty, and renderable appearance.",
+      "evidence_ids": [
+        "M001",
+        "M021",
+        "M040",
+        "M046"
+      ]
+    },
+    {
+      "rank": 5,
+      "label": "Online optomechanical digital twin",
+      "gap_confidence": 5,
+      "student_feasibility": 2,
+      "rationale": "Mechanical identification typically assumes a sufficient renderer while optical inverse rendering assumes a static scene; joint online observability and latency are unresolved.",
+      "evidence_ids": [
+        "M046",
+        "M051",
+        "O005",
+        "O046"
+      ]
+    },
+    {
+      "rank": 6,
+      "label": "Calibrated secondary light transport",
+      "gap_confidence": 4,
+      "student_feasibility": 3,
+      "rationale": "Reflection, refraction, and global-illumination methods improve images, but controlled ground truth, uncertainty, and transport-specific cost accounting are inconsistent.",
+      "evidence_ids": [
+        "O018",
+        "O021",
+        "O030",
+        "O045"
+      ]
+    },
+    {
+      "rank": 7,
+      "label": "Sensor-aware physics under adverse capture",
+      "gap_confidence": 4,
+      "student_feasibility": 4,
+      "rationale": "Underwater, thermal, radiative, event, and nonlinear-camera models are advancing separately from mechanical identification and intervention evidence.",
+      "evidence_ids": [
+        "M051",
+        "O037",
+        "O039",
+        "O041",
+        "O046"
+      ]
+    }
+  ],
+  "papers": [
+    {
+      "id": "M001",
+      "title": "PhysGaussian: Physics-Integrated 3D Gaussians for Generative Dynamics",
+      "url": "https://arxiv.org/abs/2311.12198",
+      "year": 2023,
+      "branch": "mechanics",
+      "subclass": "continuum and multi-material simulation",
+      "publication": "CVPR 2024",
+      "access": "open arXiv full text; venue version may be paywalled",
+      "evidence": "E2 full text",
+      "novelty": "Made the same Gaussian kernels serve as renderer and MPM material points carrying kinematics and stress.",
+      "gaussian_role": "simulation and rendering particles",
+      "physical_model": "Explicit MPM; elasticity, von-Mises plasticity, Drucker–Prager granular flow, Herschel–Bulkley paste, fracture and collision",
+      "inputs": "Trained static 3DGS; manual simulation region, fill, material law, parameters and boundary conditions",
+      "evaluation": "Lattice-deformation PSNR; qualitative material suite; simulation FPS",
+      "hardware": "i9-10920X, RTX 3090; selected simulations: 25–36 FPS",
+      "limitations": "Forward simulation with manually supplied physics is not material identification.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "physical_behavior",
+        "efficiency"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "contact",
+        "unseen_intervention"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "simulation_or_update_rate",
+        "sensor_setup"
+      ],
+      "analysis_group": "continuum_particle_mechanics"
+    },
+    {
+      "id": "M002",
+      "title": "Gaussian Splashing: Unified Particles for Versatile Motion Synthesis and Rendering",
+      "url": "https://arxiv.org/abs/2401.15318",
+      "year": 2024,
+      "branch": "mechanics",
+      "subclass": "position-based solids and fluids",
+      "publication": "CVPR 2025",
+      "access": "open arXiv full text; venue version may be paywalled",
+      "evidence": "E2 full text",
+      "novelty": "Unified Gaussian rendering particles with PBD/XPBD-style motion for solids and fluids and added normals for physical shading.",
+      "gaussian_role": "direct fluid particles; deformation-driven solid appearance",
+      "physical_model": "PBD/XPBD constraints, collision and fluid dynamics",
+      "inputs": "Static 3DGS assets with object masks and manually configured physics",
+      "evaluation": "Rendered quality, motion examples and stage timings",
+      "hardware": "Simulation 1.6–8.1 s/step in reported cases; rendering components roughly 0.015–0.116 s; device NR",
+      "limitations": "Large particle counts are slow and preparation includes segmentation/inpainting.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "physical_behavior",
+        "efficiency"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "contact",
+        "unseen_intervention"
+      ],
+      "hardware_fields": [
+        "training_or_fitting_time",
+        "simulation_or_update_rate",
+        "rendering_rate"
+      ],
+      "analysis_group": "fluid_granular_mechanics"
+    },
+    {
+      "id": "M003",
+      "title": "VR-GS: A Physical Dynamics-Aware Interactive Gaussian Splatting System in Virtual Reality",
+      "url": "https://arxiv.org/abs/2401.16663",
+      "year": 2024,
+      "branch": "mechanics",
+      "subclass": "interactive cage physics",
+      "publication": "SIGGRAPH 2024",
+      "access": "open arXiv full text; venue version may be paywalled",
+      "evidence": "E2 full text",
+      "novelty": "Derived an XPBD cage from volumetricized splats for contact-driven rigid and deformable VR editing.",
+      "gaussian_role": "appearance attached to a volumetric XPBD cage",
+      "physical_model": "XPBD constraints and collision",
+      "inputs": "Static 3DGS; manual physical setup; Quest Pro hand/controller input",
+      "evaluation": "Interaction rate, preparation time, user demonstrations",
+      "hardware": "i9-14900KF, 32 GB RAM, RTX 4090, Quest Pro; about 30 min GS training, 2.5 h total preparation; example 73.8 FPS",
+      "limitations": "Cage resolution trades deformation detail for rate and robustness.",
+      "causal_level": 5,
+      "metric_families": [
+        "appearance",
+        "physical_behavior",
+        "efficiency",
+        "task_outcome"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "contact",
+        "unseen_intervention",
+        "closed_loop"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "training_or_fitting_time",
+        "end_to_end_latency",
+        "sensor_setup"
+      ],
+      "analysis_group": "deformable_articulated_mechanics"
+    },
+    {
+      "id": "M004",
+      "title": "Spring-Gaus: Reconstruction and Simulation of Elastic Objects with Spring-Mass 3D Gaussians",
+      "url": "https://arxiv.org/abs/2403.09434",
+      "year": 2024,
+      "branch": "identification",
+      "subclass": "elastic system identification",
+      "publication": "ECCV 2024",
+      "access": "open arXiv full text; venue version may be paywalled",
+      "evidence": "E2 full text",
+      "novelty": "Used sparse spring–mass anchors to drive dense splats while fitting local stiffness, velocity and boundary parameters from video.",
+      "gaussian_role": "dense appearance driven by sparse physical anchors",
+      "physical_model": "Spring–mass elasticity with learned local parameters",
+      "inputs": "Ten-view, 30-frame RGB sequences for synthetic tests; multiview video",
+      "evaluation": "Geometry, tracks, rendering and parameter/deformation tests",
+      "hardware": "RTX 3090; static GS about 10 min; 2,048 anchors and 256 neighbors",
+      "limitations": "Elastic single-object and ground-contact scope.",
+      "causal_level": 3,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "parameter_error",
+        "physical_behavior",
+        "efficiency"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "contact"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "training_or_fitting_time",
+        "sensor_setup"
+      ],
+      "analysis_group": "identification_digital_twins"
+    },
+    {
+      "id": "M005",
+      "title": "Feature Splatting: Language-Driven Physics-Based Scene Synthesis and Editing",
+      "url": "https://arxiv.org/abs/2404.01223",
+      "year": 2024,
+      "branch": "mechanics",
+      "subclass": "semantic physical editing",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Stored semantic features in Gaussians to select material regions and drive them with a particle simulator.",
+      "gaussian_role": "semantic selection and deformation target",
+      "physical_model": "External Taichi particle physics with assigned parameters",
+      "inputs": "Static scene, text prompts and semantic masks",
+      "evaluation": "Rendering quality, editing demonstrations and stage rates",
+      "hardware": "Feature training generally under 1 h; physics about 30 FPS; precomputed trajectories render about 100 FPS; GPU NR",
+      "limitations": "Language masks and chosen parameters, rather than observed dynamics, determine the result.",
+      "causal_level": 2,
+      "metric_families": [
+        "appearance",
+        "physical_behavior",
+        "efficiency"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "contact"
+      ],
+      "hardware_fields": [
+        "training_or_fitting_time",
+        "simulation_or_update_rate",
+        "rendering_rate"
+      ],
+      "analysis_group": "continuum_particle_mechanics"
+    },
+    {
+      "id": "M006",
+      "title": "PhysDreamer: Physics-Based Interaction with 3D Objects via Video Generation",
+      "url": "https://arxiv.org/abs/2404.13026",
+      "year": 2024,
+      "branch": "identification",
+      "subclass": "diffusion-supervised elasticity identification",
+      "publication": "ECCV 2024 Oral",
+      "access": "open arXiv full text; venue version may be paywalled",
+      "evidence": "E2 full text",
+      "novelty": "Used a video-generation prior as motion supervision to estimate a spatial Young’s-modulus field for Gaussian assets.",
+      "gaussian_role": "visual observation and MPM particles",
+      "physical_model": "Differentiable MPM with spatial elasticity",
+      "inputs": "Object masks, static capture, manual boundaries and generated reference motion",
+      "evaluation": "User study, motion/video similarity and unseen-force demonstrations",
+      "hardware": "NVIDIA V100; approximately one minute to generate one second of video; 50k–300k foreground particles",
+      "limitations": "Video-prior agreement does not make stiffness uniquely identifiable; collision is omitted.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "physical_behavior",
+        "efficiency"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "unseen_intervention"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "training_or_fitting_time"
+      ],
+      "analysis_group": "identification_digital_twins"
+    },
+    {
+      "id": "M007",
+      "title": "SimEndoGS: Physics-Embedded Gaussian Splatting for Sim-to-Real Endoscopic Scene Reconstruction",
+      "url": "https://arxiv.org/abs/2405.00956",
+      "year": 2024,
+      "branch": "mechanics",
+      "subclass": "surgical tissue simulation",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Filled stereo-reconstructed tissue Gaussians and evolved them with a Neo-Hookean MPM model.",
+      "gaussian_role": "surface appearance bound to filled material particles",
+      "physical_model": "Neo-Hookean MPM",
+      "inputs": "Binocular surgical video and stereo depth; manual forces/materials",
+      "evaluation": "PSNR, timing and qualitative tissue deformation",
+      "hardware": "Xeon W-2223, RTX 3090; reported simulation rates 20–25 FPS on three scenes",
+      "limitations": "Material values and interactions are configured rather than identified.",
+      "causal_level": 2,
+      "metric_families": [
+        "appearance",
+        "physical_behavior",
+        "efficiency"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "contact"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "simulation_or_update_rate",
+        "sensor_setup"
+      ],
+      "analysis_group": "deformable_articulated_mechanics"
+    },
+    {
+      "id": "M008",
+      "title": "Physics3D: Learning Physical Properties of 3D Gaussians via Video Diffusion",
+      "url": "https://arxiv.org/abs/2406.04338",
+      "year": 2024,
+      "branch": "identification",
+      "subclass": "viscoelastic identification",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Extended video-prior fitting from elasticity to viscosity and viscoelastic MPM behavior.",
+      "gaussian_role": "rendering observation for inverse mechanics",
+      "physical_model": "Differentiable viscoelastic MPM",
+      "inputs": "Static 3DGS, masks and video-diffusion motion prior",
+      "evaluation": "Perceptual motion comparisons and material-response tests",
+      "hardware": "RTX A6000 48 GB; about 5 min/object; 50^3 grid, 400 substeps/frame",
+      "limitations": "SDS plausibility and parameter truth are not equivalent.",
+      "causal_level": 3,
+      "metric_families": [
+        "appearance",
+        "physical_behavior",
+        "efficiency"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "vram",
+        "training_or_fitting_time"
+      ],
+      "analysis_group": "identification_digital_twins"
+    },
+    {
+      "id": "M009",
+      "title": "Physically Embodied Gaussian Splatting: A Visually Learnt and Physically Grounded 3D Representation for Robotics",
+      "url": "https://arxiv.org/abs/2406.10788",
+      "year": 2024,
+      "branch": "learned_physics",
+      "subclass": "correctable world model",
+      "publication": "CoRL 2024 / PMLR 2025",
+      "access": "open arXiv full text; venue version may be paywalled",
+      "evidence": "E2 full text",
+      "novelty": "Coupled Gaussian appearance to PBD prediction and converted multiview render residuals into online correction forces.",
+      "gaussian_role": "dual visual and PBD particles",
+      "physical_model": "PBD prediction plus image-residual correction",
+      "inputs": "Three calibrated RGB cameras for correction and two for evaluation",
+      "evaluation": "Tracking/correction error and live interaction rate",
+      "hardware": "RTX 3090; 30 Hz; physics prediction about 5 ms",
+      "limitations": "Laboratory multiview calibration and modest constraint scale.",
+      "causal_level": 5,
+      "metric_families": [
+        "geometry",
+        "physical_behavior",
+        "efficiency",
+        "task_outcome"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "contact",
+        "unseen_intervention",
+        "closed_loop"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "simulation_or_update_rate",
+        "end_to_end_latency",
+        "sensor_setup"
+      ],
+      "analysis_group": "learned_dynamics_control"
+    },
+    {
+      "id": "M010",
+      "title": "GIC: Gaussian-Informed Continuum for Physical Property Identification and Simulation",
+      "url": "https://arxiv.org/abs/2406.14927",
+      "year": 2024,
+      "branch": "identification",
+      "subclass": "continuum parameter identification",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Used explicit Gaussian shape as the observation layer for a differentiable volumetric continuum that fits physical properties.",
+      "gaussian_role": "visual surface coupled to continuum particles",
+      "physical_model": "Differentiable continuum mechanics",
+      "inputs": "Controlled posed multiview RGB videos",
+      "evaluation": "Geometry, appearance and property/trajectory errors",
+      "hardware": "Compute NR; multiview sensor requirement reported",
+      "limitations": "Requires a known material family and controlled capture.",
+      "causal_level": 3,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "parameter_error",
+        "physical_behavior"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id"
+      ],
+      "hardware_fields": [
+        "sensor_setup"
+      ],
+      "analysis_group": "identification_digital_twins"
+    },
+    {
+      "id": "M011",
+      "title": "GASP: Gaussian Splatting for Physics-Based Simulations",
+      "url": "https://arxiv.org/abs/2409.05819",
+      "year": 2024,
+      "branch": "mechanics",
+      "subclass": "solver-agnostic mesh coupling",
+      "publication": "CVIU 2026, DOI 10.1016/j.cviu.2026.104699",
+      "access": "open arXiv full text; venue version may be paywalled",
+      "evidence": "E2 full text",
+      "novelty": "Converted flat Gaussians into GaMeS triangles and hierarchical cores to connect splat assets with black-box physics engines.",
+      "gaussian_role": "appearance reconstructed from simulated triangle/core motion",
+      "physical_model": "External rigid/deformable solver coupling",
+      "inputs": "Trained Gaussian scenes and selected physical regions",
+      "evaluation": "FID/visual quality, interactions and timing tables",
+      "hardware": "Hardware model NR; timing tables reported",
+      "limitations": "Physical accuracy inherits the external solver and proxy conversion.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "physical_behavior",
+        "efficiency"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "contact",
+        "unseen_intervention"
+      ],
+      "hardware_fields": [
+        "simulation_or_update_rate",
+        "rendering_rate"
+      ],
+      "analysis_group": "deformable_articulated_mechanics"
+    },
+    {
+      "id": "M012",
+      "title": "Gaussian Splatting Visual MPC for Granular Media Manipulation",
+      "url": "https://arxiv.org/abs/2410.09740",
+      "year": 2024,
+      "branch": "learned_physics",
+      "subclass": "granular prediction and control",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Learned granular Gaussian dynamics and used their rendered state in visual model-predictive control.",
+      "gaussian_role": "observed and predicted granular state",
+      "physical_model": "Learned particle dynamics",
+      "inputs": "Franka Panda with four Intel RealSense RGB-D cameras",
+      "evaluation": "Prediction and granular-manipulation task outcomes",
+      "hardware": "Four RGB-D cameras; compute/runtime NR",
+      "limitations": "Sim-trained dynamics and narrow granular tasks limit generalization.",
+      "causal_level": 5,
+      "metric_families": [
+        "geometry",
+        "physical_behavior",
+        "task_outcome"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "unseen_intervention",
+        "closed_loop"
+      ],
+      "hardware_fields": [
+        "sensor_setup"
+      ],
+      "analysis_group": "learned_dynamics_control"
+    },
+    {
+      "id": "M013",
+      "title": "Dynamic 3D Gaussian Tracking for Graph-Based Neural Dynamics Modeling",
+      "url": "https://arxiv.org/abs/2410.18912",
+      "year": 2024,
+      "branch": "learned_physics",
+      "subclass": "graph dynamics and manipulation",
+      "publication": "CoRL 2024 / PMLR 2025",
+      "access": "open arXiv full text; venue version may be paywalled",
+      "evidence": "E2 full text",
+      "novelty": "Compressed dense Gaussian tracks into a control graph, learned action-conditioned soft-object dynamics, and transferred rollouts back to dense splats for planning.",
+      "gaussian_role": "dense tracker and visual decoder for a control-particle graph",
+      "physical_model": "Learned graph dynamics for rope, cloth and stuffed objects",
+      "inputs": "Four RGB-D cameras at 15 FPS with offline interaction sequences",
+      "evaluation": "Tracking, future video, rollout and manipulation success",
+      "hardware": "Four synchronized RGB-D cameras, 15 FPS; compute NR",
+      "limitations": "Scene-specific tracking and interaction data are required.",
+      "causal_level": 5,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "physical_behavior",
+        "task_outcome"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "unseen_intervention",
+        "closed_loop"
+      ],
+      "hardware_fields": [
+        "sensor_setup"
+      ],
+      "analysis_group": "learned_dynamics_control"
+    },
+    {
+      "id": "M014",
+      "title": "Efficient Physics Simulation for 3D Scenes via MLLM-Guided Gaussian Splatting (PhysSplat)",
+      "url": "https://arxiv.org/abs/2411.12789",
+      "year": 2024,
+      "branch": "mechanics",
+      "subclass": "adaptive MPM simulation",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Combined MLLM material initialization with geometry- and physics-adaptive sampling for faster Gaussian-driven MPM.",
+      "gaussian_role": "appearance particles sampled into MPM",
+      "physical_model": "MPM with semantic material priors",
+      "inputs": "Static GS and image/text material cues",
+      "evaluation": "Visual motion and simulation efficiency",
+      "hardware": "RTX 3090 experiments and RTX 4090 timing; animations within 2 min; 64^3 grid",
+      "limitations": "MLLM properties are priors, not measurements.",
+      "causal_level": 2,
+      "metric_families": [
+        "appearance",
+        "physical_behavior",
+        "efficiency"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "contact"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "training_or_fitting_time"
+      ],
+      "analysis_group": "continuum_particle_mechanics"
+    },
+    {
+      "id": "M015",
+      "title": "PhysFlow: Unleashing the Potential of Multi-modal Foundation Models and Video Diffusion for 4D Dynamic Physical Scene Simulation",
+      "url": "https://arxiv.org/abs/2411.14423",
+      "year": 2024,
+      "branch": "identification",
+      "subclass": "flow-supervised material identification",
+      "publication": "CVPR 2025",
+      "access": "open arXiv full text; venue version may be paywalled",
+      "evidence": "E2 full text",
+      "novelty": "Replaced direct video SDS with segmentation and generated optical-flow supervision for differentiable MPM parameter fitting.",
+      "gaussian_role": "rendering observation for inverse MPM",
+      "physical_model": "Constitutive-model selection and differentiable MPM",
+      "inputs": "Static capture, generated reference video, masks and optical flow",
+      "evaluation": "Parameter error and perceptual motion on PAC-NeRF-style systems",
+      "hardware": "Single NVIDIA A800; capacity, time and memory NR",
+      "limitations": "Generated-video, segmentation and flow errors propagate into a predefined material menu.",
+      "causal_level": 3,
+      "metric_families": [
+        "appearance",
+        "parameter_error",
+        "physical_behavior"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id"
+      ],
+      "hardware_fields": [
+        "gpu"
+      ],
+      "analysis_group": "identification_digital_twins"
+    },
+    {
+      "id": "M016",
+      "title": "VR-Doh: Hands-on 3D Modeling in Virtual Reality",
+      "url": "https://arxiv.org/abs/2412.00814",
+      "year": 2024,
+      "branch": "mechanics",
+      "subclass": "interactive elastoplastic sculpting",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Localized MPM updates and particle-level hand contact enable live elastoplastic editing of Gaussian assets.",
+      "gaussian_role": "appearance attached to MPM particles",
+      "physical_model": "Elastoplastic MPM and hand collision",
+      "inputs": "Static GS and Quest 3 hand/controller interaction",
+      "evaluation": "Interaction rate, speedups and user edits",
+      "hardware": "Ryzen 9 9950X, RTX 4090, Quest 3; 3.3× average localization speedup; interactive to 100^3 grid",
+      "limitations": "Editing system rather than parameter identification; mesh used for display.",
+      "causal_level": 5,
+      "metric_families": [
+        "physical_behavior",
+        "efficiency",
+        "task_outcome"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "contact",
+        "unseen_intervention",
+        "closed_loop"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "simulation_or_update_rate",
+        "end_to_end_latency",
+        "sensor_setup"
+      ],
+      "analysis_group": "deformable_articulated_mechanics"
+    },
+    {
+      "id": "M017",
+      "title": "PBDyG: Position Based Dynamic Gaussians for Motion-Aware Clothed Human Avatars",
+      "url": "https://arxiv.org/abs/2412.04433",
+      "year": 2024,
+      "branch": "mechanics",
+      "subclass": "cloth and avatar simulation",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Modeled clothing as PBD Gaussians in contact with an SMPL body so response depends on movement rather than pose alone.",
+      "gaussian_role": "cloth simulation and appearance primitives",
+      "physical_model": "PBD cloth with body contact",
+      "inputs": "Multiview RGB human performance capture and SMPL prior",
+      "evaluation": "Motion and rendering comparisons",
+      "hardware": "Compute, VRAM and wall time NR; 10k selected Gaussians and ten substeps/frame",
+      "limitations": "Human/body-prior specialization.",
+      "causal_level": 2,
+      "metric_families": [
+        "appearance",
+        "physical_behavior"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "contact"
+      ],
+      "hardware_fields": [],
+      "analysis_group": "deformable_articulated_mechanics"
+    },
+    {
+      "id": "M018",
+      "title": "Text-to-3D Gaussian Splatting with Physics-Grounded Motion Generation",
+      "url": "https://arxiv.org/abs/2412.05560",
+      "year": 2024,
+      "branch": "learned_physics",
+      "subclass": "physics-guided generative motion",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Applied continuum deformation maps to text-generated Gaussian assets to produce physics-grounded motion.",
+      "gaussian_role": "generated appearance driven by continuum deformation",
+      "physical_model": "Continuum mechanics with text-conditioned asset generation",
+      "inputs": "Text prompt and generated 3DGS",
+      "evaluation": "Appearance and perceptual motion comparisons",
+      "hardware": "NR",
+      "limitations": "Limited materials and no measured physical or interaction ground truth.",
+      "causal_level": 1,
+      "metric_families": [
+        "appearance",
+        "physical_behavior"
+      ],
+      "capabilities": [
+        "explicit_state"
+      ],
+      "hardware_fields": [],
+      "analysis_group": "learned_dynamics_control"
+    },
+    {
+      "id": "M019",
+      "title": "LIVE-GS: LLM-Powered Interactive VR with Physics-Aware Gaussian Splatting",
+      "url": "https://arxiv.org/abs/2412.09176",
+      "year": 2024,
+      "branch": "learned_physics",
+      "subclass": "semantic physics configuration",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Used an LLM to assign mass, deformation and plasticity parameters before connecting splats to Unity physics.",
+      "gaussian_role": "visual asset and semantic physical proxy",
+      "physical_model": "Unity Obi/Rayfire with language-predicted parameters",
+      "inputs": "Gaussian scene, text instructions and Quest 3 interaction",
+      "evaluation": "User preference, setup time and interaction rate",
+      "hardware": "i9-14900K, 64 GB, RTX 4080 Super 16 GB, Quest 3; 30 FPS; LLM analysis 5–10 s",
+      "limitations": "Semantic estimates are not causal parameter recovery.",
+      "causal_level": 5,
+      "metric_families": [
+        "efficiency",
+        "task_outcome"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "contact",
+        "closed_loop"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "vram",
+        "training_or_fitting_time",
+        "end_to_end_latency",
+        "sensor_setup"
+      ],
+      "analysis_group": "learned_dynamics_control"
+    },
+    {
+      "id": "M020",
+      "title": "GaussianProperty: Integrating Physical Properties to 3D Gaussians with LMMs",
+      "url": "https://arxiv.org/abs/2412.11258",
+      "year": 2024,
+      "branch": "identification",
+      "subclass": "visual physical-property fields",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Attached training-free material, hardness and related physical-property fields to individual Gaussians using segmentation and vision-language models.",
+      "gaussian_role": "carrier of semantic physical attributes",
+      "physical_model": "Static property inference, not dynamics-based identification",
+      "inputs": "Thirty images per object; iPhone 13 hardness dataset",
+      "evaluation": "Property accuracy and downstream simulation/grasping demonstrations",
+      "hardware": "RTX A6000; about 5 min/object; iPhone 13 capture",
+      "limitations": "Appearance/VLM attribution can be overconfident and does not establish dynamics.",
+      "causal_level": 1,
+      "metric_families": [
+        "parameter_error",
+        "efficiency",
+        "task_outcome"
+      ],
+      "capabilities": [
+        "parameter_id"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "training_or_fitting_time",
+        "sensor_setup"
+      ],
+      "analysis_group": "identification_digital_twins"
+    },
+    {
+      "id": "M021",
+      "title": "OmniPhysGS: 3D Constitutive Gaussians for General Physics-Based Dynamics Generation",
+      "url": "https://arxiv.org/abs/2501.18982",
+      "year": 2025,
+      "branch": "mechanics",
+      "subclass": "heterogeneous constitutive simulation",
+      "publication": "ICLR 2025",
+      "access": "open arXiv full text; venue version may be paywalled",
+      "evidence": "E2 full text",
+      "novelty": "Introduced constitutive Gaussians that compose heterogeneous material laws for long MPM rollouts.",
+      "gaussian_role": "rendering and heterogeneous material particles",
+      "physical_model": "Learned/selected constitutive behavior in MPM",
+      "inputs": "Static Gaussian assets and material prompts/priors",
+      "evaluation": "Motion realism, rendering and efficiency ablations",
+      "hardware": "A6000 48 GB; reported 75% GPU-memory saving; 150-frame sequences",
+      "limitations": "Generative forward dynamics remain weakly calibrated to real materials.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "physical_behavior",
+        "efficiency"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "contact",
+        "unseen_intervention"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "vram",
+        "memory_or_size"
+      ],
+      "analysis_group": "continuum_particle_mechanics"
+    },
+    {
+      "id": "M022",
+      "title": "PUGS: Zero-Shot Physical Understanding with Gaussian Splatting",
+      "url": "https://arxiv.org/abs/2502.12231",
+      "year": 2025,
+      "branch": "identification",
+      "subclass": "zero-shot property inference",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Predicted dense mass, friction, hardness, Young’s modulus and material fields on splats for physical reasoning and grasping.",
+      "gaussian_role": "carrier of inferred physical attributes",
+      "physical_model": "Vision-language/material prior inference",
+      "inputs": "Smartphone multiview capture",
+      "evaluation": "Property evaluation and robotic task outcomes",
+      "hardware": "Smartphone capture; compute NR",
+      "limitations": "No interaction-based evidence that inferred values match real dynamics.",
+      "causal_level": 1,
+      "metric_families": [
+        "parameter_error",
+        "task_outcome"
+      ],
+      "capabilities": [
+        "parameter_id"
+      ],
+      "hardware_fields": [
+        "sensor_setup"
+      ],
+      "analysis_group": "identification_digital_twins"
+    },
+    {
+      "id": "M023",
+      "title": "3D Dynamic Fluid Assets from Single-View Videos with Generative Gaussian Splatting",
+      "url": "https://arxiv.org/abs/2503.00868",
+      "year": 2025,
+      "branch": "identification",
+      "subclass": "fluid reconstruction and parameter fitting",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Recovered Gaussian fluid geometry/velocity and fitted density, viscosity, boundary velocities, bounce, damping, gravity and timestep through differentiable APIC.",
+      "gaussian_role": "fluid surface/appearance observation",
+      "physical_model": "Differentiable APIC fluid simulation",
+      "inputs": "Single-view fluid video",
+      "evaluation": "Reconstruction, parameter/velocity and resimulation comparisons",
+      "hardware": "Xeon Platinum 8255C, Tesla V100; runtime breakdown reported; real-time forward resimulation claim",
+      "limitations": "Single-view and fine-splash ambiguities require costly grids and small steps.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "parameter_error",
+        "physical_behavior",
+        "efficiency"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "unseen_intervention"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "training_or_fitting_time",
+        "simulation_or_update_rate"
+      ],
+      "analysis_group": "identification_digital_twins"
+    },
+    {
+      "id": "M024",
+      "title": "PhysTwin: Physics-Informed Reconstruction and Simulation of Deformable Objects from Videos",
+      "url": "https://arxiv.org/abs/2503.17973",
+      "year": 2025,
+      "branch": "identification",
+      "subclass": "deformable digital twin",
+      "publication": "ICCV 2025",
+      "access": "open arXiv full text; venue version may be paywalled",
+      "evidence": "E2 full text",
+      "novelty": "Combined complete-shape priors, spring–mass/contact topology and Gaussian appearance with sparse-to-dense parameter fitting and unseen interactions.",
+      "gaussian_role": "appearance bound to spring–mass nodes",
+      "physical_model": "Spring–mass mechanics and collision",
+      "inputs": "Three RealSense D455 RGB-D viewpoints; short interaction videos",
+      "evaluation": "Chamfer, track error, IoU, image metrics and unseen-interaction rollouts",
+      "hardware": "Three D455 cameras; real-time simulation claimed without exact compute/FPS",
+      "limitations": "Controlled per-object fitting and limited topology/contact diversity.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "parameter_error",
+        "physical_behavior",
+        "efficiency"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "contact",
+        "unseen_intervention"
+      ],
+      "hardware_fields": [
+        "simulation_or_update_rate",
+        "sensor_setup"
+      ],
+      "analysis_group": "identification_digital_twins"
+    },
+    {
+      "id": "M025",
+      "title": "Learning 3D-Gaussian Simulators from RGB Videos (3DGSim)",
+      "url": "https://arxiv.org/abs/2503.24009",
+      "year": 2025,
+      "branch": "learned_physics",
+      "subclass": "learned Gaussian simulator",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Learned rigid, elastic and cloth Gaussian rollouts from RGB video with an inverse renderer and Point Transformer.",
+      "gaussian_role": "learned physical state and renderer",
+      "physical_model": "Data-driven Gaussian dynamics",
+      "inputs": "Simulated multiview RGB: four input and five target cameras",
+      "evaluation": "Rollout tracks, images and generalization",
+      "hardware": "One H100, about six days",
+      "limitations": "Simulation-only training and high compute limit real deployment.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "physical_behavior",
+        "efficiency"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "unseen_intervention"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "training_or_fitting_time",
+        "sensor_setup"
+      ],
+      "analysis_group": "learned_dynamics_control"
+    },
+    {
+      "id": "M026",
+      "title": "PIN-WM: Learning Physics-Informed World Models for Non-Prehensile Manipulation",
+      "url": "https://arxiv.org/abs/2504.16693",
+      "year": 2025,
+      "branch": "identification",
+      "subclass": "rigid-body identification and control",
+      "publication": "RSS 2025",
+      "access": "open arXiv full text; venue version may be paywalled",
+      "evidence": "E2 full text",
+      "novelty": "Optimized mass/inertia, friction and restitution through differentiable rigid simulation and Gaussian rendering before policy learning.",
+      "gaussian_role": "visual observation model around rigid dynamics",
+      "physical_model": "Differentiable rigid-body contact",
+      "inputs": "Eye-in-hand and eye-to-hand RGB observations with known mesh/pose",
+      "evaluation": "Parameter recovery and pushing/flipping policy success",
+      "hardware": "Camera setup reported; compute/runtime NR",
+      "limitations": "Rigid-only and rendering loss is sensitive to shadows.",
+      "causal_level": 5,
+      "metric_families": [
+        "parameter_error",
+        "physical_behavior",
+        "task_outcome"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "contact",
+        "unseen_intervention",
+        "closed_loop"
+      ],
+      "hardware_fields": [
+        "sensor_setup"
+      ],
+      "analysis_group": "identification_digital_twins"
+    },
+    {
+      "id": "M027",
+      "title": "Splatting Physical Scenes: End-to-End Real-to-Sim from Imperfect Robot Data",
+      "url": "https://arxiv.org/abs/2506.04120",
+      "year": 2025,
+      "branch": "identification",
+      "subclass": "mesh-bound real-to-sim",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Bound splats to differentiable meshes and MuJoCo MJX state to fit real scenes from noisy robot observations.",
+      "gaussian_role": "photorealistic observation bound to simulation meshes",
+      "physical_model": "Rigid/articulated MuJoCo MJX",
+      "inputs": "Imperfect robot data and images",
+      "evaluation": "Reconstruction, state fitting and task tests",
+      "hardware": "H100 80 GB; 40k-step real object 157 s plus 60 s JIT; full run 3–4 min",
+      "limitations": "Mechanics lives in meshes rather than Gaussian material state.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "parameter_error",
+        "efficiency",
+        "task_outcome"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "contact",
+        "unseen_intervention"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "vram",
+        "training_or_fitting_time"
+      ],
+      "analysis_group": "identification_digital_twins"
+    },
+    {
+      "id": "M028",
+      "title": "PIG: Physics-Informed Gaussians as Adaptive Parametric Mesh Representations",
+      "url": "https://arxiv.org/abs/2506.07657",
+      "year": 2025,
+      "branch": "mechanics",
+      "subclass": "multi-material contact",
+      "publication": "ACM ICMR 2025",
+      "access": "open arXiv full text; venue version may be paywalled",
+      "evidence": "E2 full text",
+      "novelty": "Combined object-level Gaussian segmentation, MLS-MPM and covariance correction for multi-object, multi-material interaction.",
+      "gaussian_role": "segmented MPM and appearance particles",
+      "physical_model": "MLS-MPM with assigned material values",
+      "inputs": "Static multiview scenes and semantic targets",
+      "evaluation": "Segmentation mIoU, rendering and qualitative contact plausibility",
+      "hardware": "Paper says RTX 4070s; count/capacity and wall time NR",
+      "limitations": "Young’s modulus and Poisson ratio are fixed; contact truth is mostly qualitative.",
+      "causal_level": 2,
+      "metric_families": [
+        "appearance",
+        "physical_behavior"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "contact"
+      ],
+      "hardware_fields": [
+        "gpu"
+      ],
+      "analysis_group": "deformable_articulated_mechanics"
+    },
+    {
+      "id": "M029",
+      "title": "ArtGS: 3D Gaussian Splatting for Interactive Visual-Physical Modeling and Manipulation of Articulated Objects",
+      "url": "https://arxiv.org/abs/2507.02600",
+      "year": 2025,
+      "branch": "identification",
+      "subclass": "articulated model identification",
+      "publication": "IROS 2025",
+      "access": "open arXiv full text; venue version may be paywalled",
+      "evidence": "E2 full text",
+      "novelty": "Recovered Gaussian bones, joints and physical articulation and refined state through manipulation.",
+      "gaussian_role": "articulated appearance and state",
+      "physical_model": "Rigid-part kinematics and joint constraints",
+      "inputs": "Franka arm, two RealSense D415 cameras, 15 initialization views",
+      "evaluation": "Joint/pose/reconstruction and manipulation metrics",
+      "hardware": "Franka with two D415 RGB-D cameras; compute NR",
+      "limitations": "Articulated rigid parts rather than continuum objects.",
+      "causal_level": 5,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "parameter_error",
+        "task_outcome"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "unseen_intervention",
+        "closed_loop"
+      ],
+      "hardware_fields": [
+        "sensor_setup"
+      ],
+      "analysis_group": "identification_digital_twins"
+    },
+    {
+      "id": "M030",
+      "title": "MASIV: Material-Agnostic System Identification from Videos",
+      "url": "https://arxiv.org/abs/2508.01112",
+      "year": 2025,
+      "branch": "identification",
+      "subclass": "neural constitutive identification",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Fitted learnable neural constitutive laws with Gaussian appearance/silhouette supervision instead of selecting one analytic material family.",
+      "gaussian_role": "visual observation for learned constitutive dynamics",
+      "physical_model": "Neural constitutive model with differentiable simulation",
+      "inputs": "Forty-five multiview RGB sequences, about 14 frames/view",
+      "evaluation": "Parameter/rollout, image and material-generalization tests",
+      "hardware": "Hardware NR; multiview setup reported",
+      "limitations": "Initialization still depends on a pretrained constitutive model.",
+      "causal_level": 3,
+      "metric_families": [
+        "appearance",
+        "parameter_error",
+        "physical_behavior"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id"
+      ],
+      "hardware_fields": [
+        "sensor_setup"
+      ],
+      "analysis_group": "identification_digital_twins"
+    },
+    {
+      "id": "M031",
+      "title": "MPMAvatar: Learning 3D Gaussian Avatars with Accurate and Robust Physics-Based Dynamics",
+      "url": "https://arxiv.org/abs/2510.01619",
+      "year": 2025,
+      "branch": "identification",
+      "subclass": "avatar material identification",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Optimized density, Young’s modulus and garment attachment against tracked dynamics while using Gaussians for appearance.",
+      "gaussian_role": "avatar rendering bound to MPM particles",
+      "physical_model": "MPM garment/body dynamics",
+      "inputs": "Multiview human capture and tracked meshes",
+      "evaluation": "Rendering, track and physical-response tests",
+      "hardware": "RTX 4090; 1.1 s/frame; 200 parameter iterations and 400 substeps",
+      "limitations": "Tracked meshes and human-specific capture; not real-time.",
+      "causal_level": 3,
+      "metric_families": [
+        "appearance",
+        "parameter_error",
+        "physical_behavior",
+        "efficiency"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "contact"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "training_or_fitting_time",
+        "simulation_or_update_rate"
+      ],
+      "analysis_group": "identification_digital_twins"
+    },
+    {
+      "id": "M032",
+      "title": "Real-to-Sim Robot Policy Evaluation with Gaussian Splatting Simulation of Soft-Body Interactions",
+      "url": "https://arxiv.org/abs/2511.04665",
+      "year": 2025,
+      "branch": "learned_physics",
+      "subclass": "soft-body policy evaluation",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Used spring–mass/contact Gaussian digital twins to evaluate real robot policies repeatably under soft-object interaction.",
+      "gaussian_role": "digital-twin appearance and soft-body state",
+      "physical_model": "PhysTwin-style spring–mass and collision",
+      "inputs": "Three RealSense D455 cameras for twin capture",
+      "evaluation": "Policy outcome, visual and trajectory agreement",
+      "hardware": "Three D455 cameras; one-GPU simulator 5–30 FPS",
+      "limitations": "Object-specific scanning/training precede evaluation.",
+      "causal_level": 5,
+      "metric_families": [
+        "appearance",
+        "physical_behavior",
+        "efficiency",
+        "task_outcome"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "contact",
+        "unseen_intervention",
+        "closed_loop"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "simulation_or_update_rate",
+        "sensor_setup"
+      ],
+      "analysis_group": "learned_dynamics_control"
+    },
+    {
+      "id": "M033",
+      "title": "Physics-Informed Deformable Gaussian Splatting: Towards Unified Constitutive Laws for Time-Evolving Material Field",
+      "url": "https://arxiv.org/abs/2511.06299",
+      "year": 2025,
+      "branch": "learned_physics",
+      "subclass": "physics-informed dynamic reconstruction",
+      "publication": "AAAI 2026",
+      "access": "open arXiv full text; venue version may be paywalled",
+      "evidence": "E2 full text",
+      "novelty": "Treated time-varying Gaussians as a Lagrangian field with velocity, stress and constitutive constraints rather than a free visual warp.",
+      "gaussian_role": "dynamic renderer and material field",
+      "physical_model": "Learned constitutive dynamics with physics losses",
+      "inputs": "Monocular dynamic videos and optical flow",
+      "evaluation": "NVS, extrapolation and physics-consistency tests",
+      "hardware": "A800 80 GB; 40k–50k iterations; reported about 110–250 FPS and 4.3–18.2 GB across comparisons",
+      "limitations": "Consistency constraints do not establish unique real material parameters.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "physical_behavior",
+        "efficiency"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "unseen_intervention"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "vram",
+        "training_or_fitting_time",
+        "rendering_rate",
+        "memory_or_size"
+      ],
+      "analysis_group": "learned_dynamics_control"
+    },
+    {
+      "id": "M034",
+      "title": "Gaussian-Augmented Physics Simulation and System Identification with Complex Colliders",
+      "url": "https://arxiv.org/abs/2511.06846",
+      "year": 2025,
+      "branch": "identification",
+      "subclass": "contact-aware system identification",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Represented non-planar static or moving colliders with Gaussian collision grids inside differentiable MPM identification.",
+      "gaussian_role": "appearance plus Gaussian collision interface",
+      "physical_model": "Differentiable MPM and complex collider contact",
+      "inputs": "Synthetic controlled interactions and collider geometry",
+      "evaluation": "Seventy-five synthetic identification rollouts",
+      "hardware": "NR",
+      "limitations": "Controlled synthetic validation and known collider geometry.",
+      "causal_level": 3,
+      "metric_families": [
+        "parameter_error",
+        "physical_behavior"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "contact"
+      ],
+      "hardware_fields": [],
+      "analysis_group": "identification_digital_twins"
+    },
+    {
+      "id": "M035",
+      "title": "PhysMorph-GS: Render-Guided Volumetric Morphing with Differentiable Physics",
+      "url": "https://arxiv.org/abs/2511.16988",
+      "year": 2025,
+      "branch": "mechanics",
+      "subclass": "differentiable inverse design",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Backpropagated render objectives through deformation gradients and differentiable MPM for target physical morphing.",
+      "gaussian_role": "render loss and MPM particles",
+      "physical_model": "Differentiable MPM plastic morphing",
+      "inputs": "Gaussian assets and target render/shape",
+      "evaluation": "Target similarity and optimization cost",
+      "hardware": "Single RTX GPU, model NR; 534k particles about 4 min/frame",
+      "limitations": "Optimizes graphics plausibility with a fixed material, not real material truth.",
+      "causal_level": 3,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "physical_behavior",
+        "efficiency"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "training_or_fitting_time"
+      ],
+      "analysis_group": "deformable_articulated_mechanics"
+    },
+    {
+      "id": "M036",
+      "title": "PhysGS: Bayesian-Inferred Gaussian Splatting for Physical Property Estimation",
+      "url": "https://arxiv.org/abs/2511.18570",
+      "year": 2025,
+      "branch": "identification",
+      "subclass": "uncertainty-aware property inference",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Added Bayesian per-Gaussian friction, hardness, stiffness, density and material fields with aleatoric/epistemic uncertainty.",
+      "gaussian_role": "carrier of probabilistic physical attributes",
+      "physical_model": "Bayesian visual/VLM inference",
+      "inputs": "Multiview visual reconstruction",
+      "evaluation": "Property prediction and uncertainty tests",
+      "hardware": "RTX A5000; 20k GS iterations",
+      "limitations": "Static appearance-based inference is not dynamic system identification.",
+      "causal_level": 1,
+      "metric_families": [
+        "parameter_error",
+        "efficiency"
+      ],
+      "capabilities": [
+        "parameter_id"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "training_or_fitting_time"
+      ],
+      "analysis_group": "identification_digital_twins"
+    },
+    {
+      "id": "M037",
+      "title": "PhysTalk: Language-Driven Real-Time Physics in 3D Gaussian Scenes",
+      "url": "https://arxiv.org/abs/2512.24986",
+      "year": 2025,
+      "branch": "learned_physics",
+      "subclass": "language-programmed simulation",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Generated executable Genesis multi-solver programs for Gaussian scenes covering MPM, SPH, rigid and hybrid materials.",
+      "gaussian_role": "scene/asset interface to generated physics programs",
+      "physical_model": "External Genesis solvers configured by an LLM",
+      "inputs": "Gaussian scene and language instructions",
+      "evaluation": "Diverse interaction demonstrations and user/task evidence",
+      "hardware": "NR",
+      "limitations": "Language-to-code reliability and semantic parameter selection dominate correctness.",
+      "causal_level": 2,
+      "metric_families": [
+        "physical_behavior",
+        "task_outcome"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "contact"
+      ],
+      "hardware_fields": [],
+      "analysis_group": "learned_dynamics_control"
+    },
+    {
+      "id": "M038",
+      "title": "GaussianFluent: Gaussian Simulation for Dynamic Scenes with Mixed Materials",
+      "url": "https://arxiv.org/abs/2601.09265",
+      "year": 2026,
+      "branch": "mechanics",
+      "subclass": "mixed materials and fracture",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Added fracture-aware interior completion and continuous return mapping for mixed-material Gaussian simulation.",
+      "gaussian_role": "surface and filled material particles",
+      "physical_model": "GPU CD-MPM with fracture",
+      "inputs": "Static Gaussian assets and assigned material regions",
+      "evaluation": "Material suite, fracture and performance",
+      "hardware": "GPU identity ambiguous; reports 52.22 FP32 TFLOPS, about 10 GB typical/<16 GB peak, GPU CD-MPM about 1 s/frame",
+      "limitations": "Interactive rather than real-time and hardware identity is unclear.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "physical_behavior",
+        "efficiency"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "contact",
+        "unseen_intervention"
+      ],
+      "hardware_fields": [
+        "vram",
+        "simulation_or_update_rate",
+        "memory_or_size"
+      ],
+      "analysis_group": "continuum_particle_mechanics"
+    },
+    {
+      "id": "M039",
+      "title": "Mirage2Matter: A Physically Grounded Gaussian World Model from Video",
+      "url": "https://arxiv.org/abs/2602.00096",
+      "year": 2026,
+      "branch": "learned_physics",
+      "subclass": "world-model asset generation",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Created Genesis-compatible Gaussian object/scene twins and photorealistic physical simulation data for vision-language-action training.",
+      "gaussian_role": "renderer and asset interface to a physics engine",
+      "physical_model": "External Genesis dynamics plus Gaussian rendering",
+      "inputs": "Video capture, head and wrist RGB cameras",
+      "evaluation": "Simulation-data quality and robot-policy transfer",
+      "hardware": "One A100 for 200k VLA steps; RTX 4090 deployment",
+      "limitations": "Most mechanical correctness comes from Genesis and reconstructed collision proxies.",
+      "causal_level": 5,
+      "metric_families": [
+        "appearance",
+        "efficiency",
+        "task_outcome"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "contact",
+        "closed_loop"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "training_or_fitting_time",
+        "sensor_setup"
+      ],
+      "analysis_group": "learned_dynamics_control"
+    },
+    {
+      "id": "M040",
+      "title": "Learning Physics-Grounded 4D Dynamics with Neural Gaussian Force Fields",
+      "url": "https://arxiv.org/abs/2602.00148",
+      "year": 2026,
+      "branch": "learned_physics",
+      "subclass": "force-conditioned dynamics",
+      "publication": "ICLR 2026",
+      "access": "open arXiv full text; venue version may be paywalled",
+      "evidence": "E2 full text",
+      "novelty": "Learned force/stress fields that evolve Gaussian object points under contacts and external forces without repeatedly running MPM.",
+      "gaussian_role": "learned physical state and renderer",
+      "physical_model": "Neural force/stress dynamics",
+      "inputs": "Simulation suites with force/action conditions",
+      "evaluation": "Rollout, physical plausibility and efficiency",
+      "hardware": "Eight H100 80 GB GPUs for 48 h; baseline Pointformer four H100s for 60 h",
+      "limitations": "High simulation-data and compute dependence.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "physical_behavior",
+        "efficiency"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "contact",
+        "unseen_intervention"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "vram",
+        "training_or_fitting_time"
+      ],
+      "analysis_group": "learned_dynamics_control"
+    },
+    {
+      "id": "M041",
+      "title": "FastPhysGS: Accelerating Physics-Based Dynamic 3DGS Simulation via Interior Completion and Adaptive Optimization",
+      "url": "https://arxiv.org/abs/2602.01723",
+      "year": 2026,
+      "branch": "identification",
+      "subclass": "fast material optimization",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Combined instance-aware filling with graph-decoupled physical-parameter optimization to accelerate MPM animation.",
+      "gaussian_role": "surface appearance and completed physical particles",
+      "physical_model": "MPM with optimized material state",
+      "inputs": "Static assets and prior/LLM initialization",
+      "evaluation": "Visual realism, physical rollout and optimization speed",
+      "hardware": "RTX A6000 48 GB; 150 simulated/rendered frames; exact stage times NR",
+      "limitations": "Prior-initialized parameters and visual benchmarks weaken identifiability claims.",
+      "causal_level": 3,
+      "metric_families": [
+        "appearance",
+        "parameter_error",
+        "physical_behavior",
+        "efficiency"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "contact"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "vram"
+      ],
+      "analysis_group": "identification_digital_twins"
+    },
+    {
+      "id": "M042",
+      "title": "CloDS: Visual-Only Unsupervised Cloth Dynamics Learning in Unknown Conditions",
+      "url": "https://arxiv.org/abs/2602.01844",
+      "year": 2026,
+      "branch": "learned_physics",
+      "subclass": "cloth dynamics learning",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Used Gaussian/mesh rendering supervision to learn cloth dynamics without direct physical-state labels.",
+      "gaussian_role": "visual decoder for a neural cloth simulator",
+      "physical_model": "Learned cloth dynamics",
+      "inputs": "Simulated multiview cloth sequences",
+      "evaluation": "Geometry, video and rollout evaluation",
+      "hardware": "H800 80 GB and Xeon Platinum 8380; 30 simulated camera positions",
+      "limitations": "Simulation-data and cloth-only scope.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "physical_behavior"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "unseen_intervention"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "vram",
+        "sensor_setup"
+      ],
+      "analysis_group": "learned_dynamics_control"
+    },
+    {
+      "id": "M043",
+      "title": "SoMA: A Real-to-Sim Neural Simulator for Robotic Soft-Body Manipulation",
+      "url": "https://arxiv.org/abs/2602.02402",
+      "year": 2026,
+      "branch": "learned_physics",
+      "subclass": "robot-conditioned soft-body dynamics",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Evolved Gaussian soft-body state in a latent simulator conditioned jointly on environment forces and robot actions.",
+      "gaussian_role": "learned soft-body state and renderer",
+      "physical_model": "Robot-conditioned latent dynamics",
+      "inputs": "Three RealSense D405 RGB cameras at 30 FPS",
+      "evaluation": "Rollout, visual and manipulation results",
+      "hardware": "Four H200 GPUs for about 24 h training; one H200 inference about 12 FPS",
+      "limitations": "Expensive training and narrow object/action distributions.",
+      "causal_level": 5,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "physical_behavior",
+        "efficiency",
+        "task_outcome"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "contact",
+        "unseen_intervention",
+        "closed_loop"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "training_or_fitting_time",
+        "simulation_or_update_rate",
+        "sensor_setup"
+      ],
+      "analysis_group": "learned_dynamics_control"
+    },
+    {
+      "id": "M044",
+      "title": "i-PhysGaussian: Implicit Physical Simulation for 3D Gaussian Splatting",
+      "url": "https://arxiv.org/abs/2602.17117",
+      "year": 2026,
+      "branch": "mechanics",
+      "subclass": "implicit MPM integration",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Used an implicit MPM integrator for stiff and quasi-static Gaussian assets that are fragile under explicit small-step updates.",
+      "gaussian_role": "appearance and MPM particles",
+      "physical_model": "Implicit MPM",
+      "inputs": "Static Gaussian assets and prescribed loads/materials",
+      "evaluation": "Accuracy/stability and runtime comparisons",
+      "hardware": "RTX 4090 24 GB",
+      "limitations": "Preprint; forward parameters remain supplied.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "physical_behavior",
+        "efficiency"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "contact",
+        "unseen_intervention"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "vram"
+      ],
+      "analysis_group": "continuum_particle_mechanics"
+    },
+    {
+      "id": "M045",
+      "title": "D-REX: Differentiable Real-to-Sim-to-Real Engine for Learning Dexterous Grasping",
+      "url": "https://arxiv.org/abs/2603.01151",
+      "year": 2026,
+      "branch": "identification",
+      "subclass": "mass identification and grasping",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Used Gaussian/2DGS digital twins and differentiable rigid dynamics to identify mass before force-aware grasp-policy learning.",
+      "gaussian_role": "visual observation and digital-twin appearance",
+      "physical_model": "Differentiable rigid-body dynamics",
+      "inputs": "Object scans and robot control signals",
+      "evaluation": "Mass recovery and dexterous grasp success",
+      "hardware": "RTX 4090; reconstruction 30–35 min/object, identification 5–20 min, inference about 0.5 s",
+      "limitations": "Mass-focused offline system with difficulty on tiny objects.",
+      "causal_level": 5,
+      "metric_families": [
+        "geometry",
+        "parameter_error",
+        "efficiency",
+        "task_outcome"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "contact",
+        "unseen_intervention",
+        "closed_loop"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "training_or_fitting_time",
+        "end_to_end_latency"
+      ],
+      "analysis_group": "identification_digital_twins"
+    },
+    {
+      "id": "M046",
+      "title": "GaussTwin: Unified Simulation and Correction with Gaussian Splatting for Robotic Digital Twins",
+      "url": "https://arxiv.org/abs/2603.05108",
+      "year": 2026,
+      "branch": "identification",
+      "subclass": "correctable deformable digital twin",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Anchored Gaussians to PBD/Cosserat elements and corrected the digital twin online at pose level.",
+      "gaussian_role": "appearance rigidly anchored to physical elements",
+      "physical_model": "PBD plus discrete Cosserat rods",
+      "inputs": "Four D415 cameras for initialization and three for tracking",
+      "evaluation": "Tracking, correction, simulation and manipulation",
+      "hardware": "RTX 4090; 25 Hz total about 40 ms: segmentation 24 ms, pose 10 ms, simulation/I/O 6 ms",
+      "limitations": "Calibrated lab setting and known object abstraction.",
+      "causal_level": 5,
+      "metric_families": [
+        "geometry",
+        "physical_behavior",
+        "efficiency",
+        "task_outcome"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "contact",
+        "unseen_intervention",
+        "closed_loop"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "simulation_or_update_rate",
+        "end_to_end_latency",
+        "sensor_setup"
+      ],
+      "analysis_group": "identification_digital_twins"
+    },
+    {
+      "id": "M047",
+      "title": "DiffWind: Physics-Informed Differentiable Modeling of Wind-Driven Object Dynamics",
+      "url": "https://arxiv.org/abs/2603.09668",
+      "year": 2026,
+      "branch": "identification",
+      "subclass": "wind-field and material identification",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Jointly fitted an invisible grid wind field and deformable Gaussian object through differentiable LBM–MPM–rendering.",
+      "gaussian_role": "appearance observation and physical object particles",
+      "physical_model": "Coupled LBM wind and MPM object dynamics",
+      "inputs": "Monocular GoPro video with depth/MLLM initialization",
+      "evaluation": "Flow, geometry, rollout and wind/material tests",
+      "hardware": "RTX 4090 24 GB; about 2 h/scene; 1.17 s/optimization step; 12.3–21 GB across grids",
+      "limitations": "Monocular ambiguity and expensive per-scene optimization.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "parameter_error",
+        "physical_behavior",
+        "efficiency"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "unseen_intervention"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "vram",
+        "training_or_fitting_time",
+        "memory_or_size",
+        "sensor_setup"
+      ],
+      "analysis_group": "identification_digital_twins"
+    },
+    {
+      "id": "M048",
+      "title": "UAV-Assisted Scan-to-Simulation for Landslides Using Physics-Informed Gaussian Splatting",
+      "url": "https://arxiv.org/abs/2605.10715",
+      "year": 2026,
+      "branch": "mechanics",
+      "subclass": "geophysical scan-to-simulation",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Fed UAV Gaussian terrain reconstruction into MPM landslide particles and mapped simulated motion back to splats.",
+      "gaussian_role": "terrain observation and simulation visualization",
+      "physical_model": "MPM landslide model",
+      "inputs": "UAV imagery and reconstructed terrain",
+      "evaluation": "Preliminary terrain/simulation demonstrations",
+      "hardware": "RTX 4090; runtime NR; UAV sensor setup",
+      "limitations": "Simplified geomechanics and limited quantitative validation.",
+      "causal_level": 2,
+      "metric_families": [
+        "geometry",
+        "physical_behavior"
+      ],
+      "capabilities": [
+        "explicit_state"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "sensor_setup"
+      ],
+      "analysis_group": "fluid_granular_mechanics"
+    },
+    {
+      "id": "M049",
+      "title": "PG-3DGS: Optimizing 3D Gaussian Splatting to Satisfy Physics Objectives",
+      "url": "https://arxiv.org/abs/2605.11266",
+      "year": 2026,
+      "branch": "mechanics",
+      "subclass": "physics-constrained inverse design",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Backpropagated differentiable fluid objectives into Gaussian geometry so assets satisfy functional flow goals as well as images.",
+      "gaussian_role": "design variables and renderer",
+      "physical_model": "Differentiable fluid simulation",
+      "inputs": "Gaussian asset, images and target functional objective",
+      "evaluation": "Image/geometry quality and physical function success",
+      "hardware": "NR",
+      "limitations": "Task-conditioned inverse design can move geometry away from real shape.",
+      "causal_level": 3,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "physical_behavior",
+        "task_outcome"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id"
+      ],
+      "hardware_fields": [],
+      "analysis_group": "continuum_particle_mechanics"
+    },
+    {
+      "id": "M050",
+      "title": "Real2Sim: A Physics-Driven and Editable Gaussian Splatting Framework for Autonomous Driving Scenes",
+      "url": "https://arxiv.org/abs/2605.13591",
+      "year": 2026,
+      "branch": "mechanics",
+      "subclass": "driving-scene physical editing",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Made object Gaussians carry MPM mass, volume, velocity and deformation state in editable driving reconstructions.",
+      "gaussian_role": "object appearance and MPM particles",
+      "physical_model": "MPM object dynamics",
+      "inputs": "Waymo five-camera, 10 Hz capture",
+      "evaluation": "Driving reconstruction, edit and simulation quality",
+      "hardware": "RTX 4090 24 GB; 50k StreetGaussian iterations; five cameras at 10 Hz",
+      "limitations": "Unseen sides and decoupled simulation/rendering remain weak.",
+      "causal_level": 2,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "physical_behavior",
+        "efficiency"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "contact"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "vram",
+        "training_or_fitting_time",
+        "sensor_setup"
+      ],
+      "analysis_group": "continuum_particle_mechanics"
+    },
+    {
+      "id": "M051",
+      "title": "EndoGSim: Physics-Aware 4D Dynamic Endoscopic Scene Simulations via MLLM-Guided Gaussian Splatting",
+      "url": "https://arxiv.org/abs/2605.16022",
+      "year": 2026,
+      "branch": "identification",
+      "subclass": "endoscopic inverse mechanics",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Initialized tissue materials with an MLLM and refined them using render/flow losses through differentiable MLS-MPM.",
+      "gaussian_role": "dynamic renderer and tissue particles",
+      "physical_model": "Differentiable MLS-MPM",
+      "inputs": "Endoscopic video with flow and material priors",
+      "evaluation": "Reconstruction, flow, material and simulation tests",
+      "hardware": "A6000; 50^3 grid and 25 substeps per rendered frame",
+      "limitations": "Material ground truth is largely simulated and endoscopic observations remain ill posed.",
+      "causal_level": 3,
+      "metric_families": [
+        "appearance",
+        "parameter_error",
+        "physical_behavior"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "contact"
+      ],
+      "hardware_fields": [
+        "gpu"
+      ],
+      "analysis_group": "identification_digital_twins"
+    },
+    {
+      "id": "M052",
+      "title": "MonoPhysics: Estimating Geometry, Appearance, and Physical Parameters from Monocular Videos",
+      "url": "https://arxiv.org/abs/2605.30320",
+      "year": 2026,
+      "branch": "identification",
+      "subclass": "monocular inverse physics",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Jointly optimized monocular geometry, scale, appearance and deformable material parameters through differentiable MPM and GS.",
+      "gaussian_role": "appearance observation and physical particles",
+      "physical_model": "Differentiable MPM",
+      "inputs": "Single-camera deforming-object video",
+      "evaluation": "Geometry, appearance, parameter and rollout error",
+      "hardware": "RTX A6000; about 2 h/scene; 200–250 physics iterations plus 5k appearance steps",
+      "limitations": "Scale/material ambiguity and per-scene cost remain fundamental.",
+      "causal_level": 3,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "parameter_error",
+        "physical_behavior",
+        "efficiency"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "training_or_fitting_time",
+        "sensor_setup"
+      ],
+      "analysis_group": "identification_digital_twins"
+    },
+    {
+      "id": "M053",
+      "title": "Learning Action-Conditional and Object-Centric Gaussian Splatting World Models for Rigid Objects (MRO-GWM)",
+      "url": "https://arxiv.org/abs/2606.01950",
+      "year": 2026,
+      "branch": "learned_physics",
+      "subclass": "rigid action-conditioned world model",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Represented multiple objects with Gaussian rigid states and learned action-conditioned prediction for MPC.",
+      "gaussian_role": "object-centric visual and rigid state",
+      "physical_model": "Action-conditioned transformer over rigid states",
+      "inputs": "Simulated robot manipulation sequences",
+      "evaluation": "Prediction, rendering and MPC success",
+      "hardware": "A40 training about 22 h/60k steps; model 5 Hz, simulator 100 Hz",
+      "limitations": "Rigid-only and simulation-trained.",
+      "causal_level": 5,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "physical_behavior",
+        "efficiency",
+        "task_outcome"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "unseen_intervention",
+        "closed_loop"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "training_or_fitting_time",
+        "simulation_or_update_rate"
+      ],
+      "analysis_group": "learned_dynamics_control"
+    },
+    {
+      "id": "M054",
+      "title": "PersistGS: Differentiable Physics for Object Permanence in 4D Gaussian Splatting",
+      "url": "https://arxiv.org/abs/2606.03479",
+      "year": 2026,
+      "branch": "identification",
+      "subclass": "occlusion-aware rigid identification",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Fitted friction and velocity with differentiable rigid physics so Gaussian objects persist through complete multiview occlusion.",
+      "gaussian_role": "dynamic appearance plus rigid state",
+      "physical_model": "Differentiable rigid-body contact",
+      "inputs": "Five training and two evaluation cameras, 512² at 60 FPS",
+      "evaluation": "Occluded trajectory, rendering and parameter tests",
+      "hardware": "RTX 5080 16 GB; fitting about 5.5 min/scene",
+      "limitations": "Only three synthetic ball/contact scenes; mass and contact stiffness fixed.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "parameter_error",
+        "physical_behavior",
+        "efficiency"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "contact",
+        "unseen_intervention"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "vram",
+        "training_or_fitting_time",
+        "sensor_setup"
+      ],
+      "analysis_group": "identification_digital_twins"
+    },
+    {
+      "id": "M055",
+      "title": "Scene-Level Heterogeneous Physics Simulation with 3D Gaussian Splats",
+      "url": "https://arxiv.org/abs/2606.21753",
+      "year": 2026,
+      "branch": "mechanics",
+      "subclass": "scene-level heterogeneous coupling",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Coupled captured splats, meshes, rigid bodies and deformables within one scene kernel and recoupled results for UE5 rendering.",
+      "gaussian_role": "scene appearance and cross-representation interface",
+      "physical_model": "Heterogeneous rigid/deformable solvers",
+      "inputs": "Captured scenes and manually prepared assets",
+      "evaluation": "Five heterogeneous interaction sequences and stage time",
+      "hardware": "Standard workstation; all five sequences under 10 min; explicitly offline",
+      "limitations": "Manual UE5 preparation and no end-to-end online rate.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "physical_behavior",
+        "efficiency"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "contact",
+        "unseen_intervention"
+      ],
+      "hardware_fields": [
+        "training_or_fitting_time"
+      ],
+      "analysis_group": "continuum_particle_mechanics"
+    },
+    {
+      "id": "M056",
+      "title": "MeGAS: Thermomechanical Dynamic Gaussian Splatting for Thermophysical Scene Editing",
+      "url": "https://arxiv.org/abs/2606.23455",
+      "year": 2026,
+      "branch": "mechanics",
+      "subclass": "thermomechanical phase change",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Added temperature and phase-change state to dynamic Gaussians with coupled thermal and mechanical solvers.",
+      "gaussian_role": "appearance and thermomechanical material state",
+      "physical_model": "Coupled thermal/mechanical phase-change simulation",
+      "inputs": "Synthetic assets and iPhone captures",
+      "evaluation": "Rendering, phase evolution and qualitative thermophysical tests",
+      "hardware": "iPhone capture; compute/runtime NR",
+      "limitations": "Preprint with synthetic-heavy material validation.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "physical_behavior"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "unseen_intervention"
+      ],
+      "hardware_fields": [
+        "sensor_setup"
+      ],
+      "analysis_group": "fluid_granular_mechanics"
+    },
+    {
+      "id": "M057",
+      "title": "Occlusion-Robust Multi-Object Decoupling for Physics-Based Robotic Interaction",
+      "url": "https://arxiv.org/abs/2606.29303",
+      "year": 2026,
+      "branch": "mechanics",
+      "subclass": "object decoupling for contact",
+      "publication": "Preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Used joint 2D/3D priors to extract complete Gaussian object assets for collision-aware MPM robot interaction.",
+      "gaussian_role": "object appearance and simulation regions",
+      "physical_model": "MPM interaction after object completion",
+      "inputs": "Occluded multiview scenes and robot targets",
+      "evaluation": "Image metrics and qualitative interactions",
+      "hardware": "NR",
+      "limitations": "Physics is evaluated mainly through images and qualitative contact.",
+      "causal_level": 2,
+      "metric_families": [
+        "appearance",
+        "physical_behavior"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "contact"
+      ],
+      "hardware_fields": [],
+      "analysis_group": "continuum_particle_mechanics"
+    },
+    {
+      "id": "M058",
+      "title": "FluidGS: Physics-Informed Gaussian Splatting for Dynamic Fluid Reconstruction from Sparse Views",
+      "url": "https://dl.acm.org/doi/10.1145/3746027.3755500",
+      "year": 2025,
+      "branch": "learned_physics",
+      "subclass": "physics-informed fluid reconstruction",
+      "publication": "ACM MM 2025",
+      "access": "publisher record; access varies",
+      "evidence": "E1 primary abstract/metadata",
+      "novelty": "Introduced physics-informed sparse-view dynamic fluid reconstruction with Gaussian primitives.",
+      "gaussian_role": "dynamic fluid appearance and constrained state",
+      "physical_model": "Physics-informed fluid constraints",
+      "inputs": "Sparse multiview fluid observations",
+      "evaluation": "Dynamic reconstruction and physical-consistency evidence",
+      "hardware": "NR in accessible primary abstract",
+      "limitations": "Publisher evidence supports novelty, not detailed implementation or hardware claims.",
+      "causal_level": 2,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "physical_behavior"
+      ],
+      "capabilities": [
+        "explicit_state"
+      ],
+      "hardware_fields": [],
+      "analysis_group": "learned_dynamics_control"
+    },
+    {
+      "id": "O001",
+      "title": "Relightable 3D Gaussians: Realistic Point Cloud Relighting with BRDF Decomposition and Ray Tracing",
+      "url": "https://arxiv.org/abs/2311.16043",
+      "year": 2023,
+      "branch": "physical_optics",
+      "subclass": "inverse rendering and relighting",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Associates normals, BRDF parameters, and directional incident illumination with splats, then adds BVH point-based ray tracing for visibility and shadows.",
+      "gaussian_role": "The Gaussian point cloud is the primary optimizable geometry and material carrier.",
+      "physical_model": "Microfacet-style BRDF decomposition plus the rendering equation and ray-traced visibility.",
+      "inputs": "Calibrated multi-view RGB images under fixed unknown illumination.",
+      "evaluation": "Novel-view, normal, BRDF, and relighting comparisons using PSNR/SSIM/LPIPS and material-error measures.",
+      "hardware": "GPU model NR in the inspected paper; about 0.90 h optimization per scene is reported.",
+      "limitations": "Relighting inherits geometry/normal errors; visibility is precomputed and the capture assumptions do not identify fully general spatially varying transport.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "material_or_light",
+        "efficiency"
+      ],
+      "hardware_fields": [
+        "training_or_fitting_time"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "unseen_intervention",
+        "optical_transport"
+      ],
+      "analysis_group": "inverse_rendering_relighting"
+    },
+    {
+      "id": "O002",
+      "title": "GS-IR: 3D Gaussian Splatting for Inverse Rendering",
+      "url": "https://arxiv.org/abs/2311.16473",
+      "year": 2023,
+      "branch": "physical_optics",
+      "subclass": "inverse rendering and relighting",
+      "publication": "CVPR 2024",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Derives normals from Gaussian depth and bakes occlusion to recover geometry, materials, and environment illumination with forward splatting.",
+      "gaussian_role": "Gaussians jointly carry radiance, normals, and PBR material parameters.",
+      "physical_model": "Physically based surface shading with environment illumination, normal regularization, and baked visibility/indirect-light approximations.",
+      "inputs": "Posed multi-view RGB images captured under one unknown illumination.",
+      "evaluation": "Novel view synthesis, normal/albedo/roughness recovery, and relighting on synthetic and real inverse-rendering scenes.",
+      "hardware": "GPU model NR in the inspected paper; roughly 45 min optimization per scene is reported.",
+      "limitations": "Baked occlusion is not a full differentiable multi-bounce transport solution and the inverse problem remains illumination-material ambiguous.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "material_or_light",
+        "efficiency"
+      ],
+      "hardware_fields": [
+        "training_or_fitting_time"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "unseen_intervention",
+        "optical_transport"
+      ],
+      "analysis_group": "inverse_rendering_relighting"
+    },
+    {
+      "id": "O003",
+      "title": "GaussianShader: 3D Gaussian Splatting with Shading Functions for Reflective Surfaces",
+      "url": "https://arxiv.org/abs/2311.17977",
+      "year": 2023,
+      "branch": "physical_optics",
+      "subclass": "inverse rendering and relighting",
+      "publication": "CVPR 2024",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Introduces a compact shading function and a shortest-axis normal-consistency scheme to model specular surfaces without abandoning splat rasterization.",
+      "gaussian_role": "Each Gaussian is treated as a local oriented surface sample with learned shading parameters.",
+      "physical_model": "Simplified physically motivated diffuse/specular shading driven by estimated normals and view direction.",
+      "inputs": "Posed multi-view RGB images of reflective scenes.",
+      "evaluation": "Reflective novel-view synthesis, geometry/normal ablations, PSNR/SSIM/LPIPS, optimization time, and rendering speed.",
+      "hardware": "GPU model NR in the primary arXiv record; 0.58 h optimization and 97 FPS are reported.",
+      "limitations": "The shading model is deliberately simplified and does not explicitly solve scene lighting, global visibility, or general inter-reflection.",
+      "causal_level": 2,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "efficiency"
+      ],
+      "hardware_fields": [
+        "training_or_fitting_time",
+        "rendering_rate"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "optical_transport"
+      ],
+      "analysis_group": "inverse_rendering_relighting"
+    },
+    {
+      "id": "O004",
+      "title": "GIR: 3D Gaussian Inverse Rendering for Relightable Scene Factorization",
+      "url": "https://arxiv.org/abs/2312.05133",
+      "year": 2023,
+      "branch": "physical_optics",
+      "subclass": "inverse rendering and relighting",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Factorizes 3DGS appearance into material, illumination, and geometry terms and provides an efficient relightable asset pipeline.",
+      "gaussian_role": "Gaussians are the scene representation and store factorized intrinsic attributes.",
+      "physical_model": "Surface rendering equation with learned material and lighting factors plus visibility approximations.",
+      "inputs": "Calibrated multi-view RGB images.",
+      "evaluation": "Novel views, intrinsic decomposition, normal/material recovery, relighting, and runtime.",
+      "hardware": "NVIDIA Tesla V100 is reported; 92.58 FPS for about 350k Gaussians. An Unreal Engine demonstration reports RTX 3090 and 78.75 FPS.",
+      "limitations": "Factorization is underconstrained from fixed-light RGB and approximate transport can bake residual illumination into materials.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "material_or_light",
+        "efficiency"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "rendering_rate"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "unseen_intervention",
+        "optical_transport"
+      ],
+      "analysis_group": "inverse_rendering_relighting"
+    },
+    {
+      "id": "O005",
+      "title": "DeferredGS: Decoupled and Editable Gaussian Splatting with Deferred Shading",
+      "url": "https://arxiv.org/abs/2404.09412",
+      "year": 2024,
+      "branch": "physical_optics",
+      "subclass": "inverse rendering and relighting",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Moves material and lighting evaluation to a deferred image-space stage, separating geometry/material attributes from illumination for editing and relighting.",
+      "gaussian_role": "Gaussians rasterize a geometry/material G-buffer consumed by a deferred shading model.",
+      "physical_model": "PBR deferred shading with environment illumination and learned visibility/indirect components.",
+      "inputs": "Posed multi-view RGB images.",
+      "evaluation": "Novel views, normal/material decomposition, relighting and editing, PSNR/SSIM/LPIPS, training and FPS.",
+      "hardware": "NVIDIA RTX 3090 24 GB; 3–4 h training and about 30 FPS at 800×800 are reported.",
+      "limitations": "Image-space deferred shading can lose primitive-level transport detail and relies on approximate learned indirect effects.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "material_or_light",
+        "efficiency"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "vram",
+        "training_or_fitting_time",
+        "rendering_rate"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "unseen_intervention",
+        "optical_transport"
+      ],
+      "analysis_group": "inverse_rendering_relighting"
+    },
+    {
+      "id": "O006",
+      "title": "3D Gaussian Splatting with Deferred Reflection",
+      "url": "https://arxiv.org/abs/2404.18454",
+      "year": 2024,
+      "branch": "physical_optics",
+      "subclass": "inverse rendering and relighting",
+      "publication": "SIGGRAPH 2024 Conference Papers; DOI 10.1145/3641519.3657456",
+      "access": "open arXiv preprint plus publisher record",
+      "evidence": "E2 full text",
+      "novelty": "Introduces a deferred reflection formulation that separates base radiance from view-dependent reflective appearance for cleaner geometry and reflection editing.",
+      "gaussian_role": "Gaussians provide a rasterized scene representation whose reflection is evaluated in a deferred stage.",
+      "physical_model": "Surface normals, reflection directions, and environment-conditioned specular reflection.",
+      "inputs": "Posed multi-view RGB images containing glossy or reflective surfaces.",
+      "evaluation": "Reflective novel-view rendering, reflection editing, geometry/normal quality, appearance metrics, and runtime.",
+      "hardware": "NR in inspected primary evidence.",
+      "limitations": "The reflection branch is not a full path tracer and complex multi-bounce or transmissive transport remains outside the model.",
+      "causal_level": 2,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "efficiency"
+      ],
+      "hardware_fields": [],
+      "capabilities": [
+        "explicit_state",
+        "optical_transport"
+      ],
+      "analysis_group": "reflection_transmission_transport"
+    },
+    {
+      "id": "O007",
+      "title": "PRTGS: Precomputed Radiance Transfer of Gaussian Splats for Real-Time High-Quality Relighting",
+      "url": "https://arxiv.org/abs/2408.03538",
+      "year": 2024,
+      "branch": "physical_optics",
+      "subclass": "inverse rendering and relighting",
+      "publication": "ACM Multimedia 2024; DOI 10.1145/3664647.3680893",
+      "access": "open arXiv preprint plus publisher record",
+      "evidence": "E2 full text",
+      "novelty": "Adapts precomputed radiance transfer to splats so complex environment-light changes can be rendered in real time.",
+      "gaussian_role": "Each Gaussian stores appearance and precomputed transport coefficients.",
+      "physical_model": "Low-frequency precomputed radiance transfer including visibility and indirect-light effects.",
+      "inputs": "Multi-view object images, reconstructed Gaussians, and environment lighting.",
+      "evaluation": "Relighting fidelity under novel environment maps, material/transport ablations, PSNR/SSIM/LPIPS, and FPS.",
+      "hardware": "NR in inspected primary evidence.",
+      "limitations": "Precomputation targets a fixed scene and low-frequency transport; geometry or material edits generally require transport recomputation.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "material_or_light",
+        "efficiency"
+      ],
+      "hardware_fields": [],
+      "capabilities": [
+        "explicit_state",
+        "unseen_intervention",
+        "optical_transport"
+      ],
+      "analysis_group": "inverse_rendering_relighting"
+    },
+    {
+      "id": "O008",
+      "title": "3iGS: Factorised Tensorial Illumination for 3D Gaussian Splatting",
+      "url": "https://arxiv.org/abs/2408.03753",
+      "year": 2024,
+      "branch": "physical_optics",
+      "subclass": "inverse rendering and relighting",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Represents view-light-dependent appearance with a factorized tensorial illumination field, supporting novel lights without committing to a surface-normal BRDF.",
+      "gaussian_role": "Gaussians carry spatial features decoded with factorized view and illumination coordinates.",
+      "physical_model": "Data-driven factorization of the reflectance field rather than an explicitly identified BRDF.",
+      "inputs": "Multi-view multi-illumination imagery.",
+      "evaluation": "Novel view and novel-light rendering, PSNR/SSIM/LPIPS, and cost relative to baseline 3DGS.",
+      "hardware": "NVIDIA V100 32 GB; about 2× inference and 3.2× training slowdown relative to baseline are reported, without absolute rates in the coded evidence.",
+      "limitations": "Relighting is observation-driven and physical material parameters are not identified; capture requires illumination variation.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "efficiency"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "vram"
+      ],
+      "capabilities": [
+        "unseen_intervention"
+      ],
+      "analysis_group": "inverse_rendering_relighting"
+    },
+    {
+      "id": "O009",
+      "title": "Progressive Radiance Distillation for Inverse Rendering with Gaussian Splatting",
+      "url": "https://arxiv.org/abs/2408.07595",
+      "year": 2024,
+      "branch": "physical_optics",
+      "subclass": "inverse rendering and relighting",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Progressively distills complex radiance into explicit geometry, material, and illumination attributes for fast PBR relighting.",
+      "gaussian_role": "Gaussians begin as a radiance field and become carriers of distilled surface/PBR attributes.",
+      "physical_model": "PBR decomposition with staged radiance-to-material distillation and visibility-aware shading.",
+      "inputs": "Calibrated multi-view RGB images under fixed illumination.",
+      "evaluation": "Novel views, normals/materials, relighting, optimization cost, and real-time rendering.",
+      "hardware": "Intel i7-13700KF, 32 GB system RAM, and NVIDIA RTX 4090; 39 min plus 8 min stages and 221 FPS are reported.",
+      "limitations": "Teacher/distillation priors can preserve baked lighting and physical accuracy is limited by the staged decomposition assumptions.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "material_or_light",
+        "efficiency"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "training_or_fitting_time",
+        "rendering_rate"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "unseen_intervention",
+        "optical_transport"
+      ],
+      "analysis_group": "inverse_rendering_relighting"
+    },
+    {
+      "id": "O010",
+      "title": "Subsurface Scattering for 3D Gaussian Splatting",
+      "url": "https://arxiv.org/abs/2408.12282",
+      "year": 2024,
+      "branch": "physical_optics",
+      "subclass": "inverse rendering and relighting",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Combines a Gaussian surface with a volumetric radiance-transfer field to reconstruct and relight translucent objects from OLAT data.",
+      "gaussian_role": "Gaussians explicitly represent the object surface and spatially varying BRDF; an auxiliary implicit volume represents subsurface transport.",
+      "physical_model": "Surface BRDF, volumetric subsurface scattering, incident-light field, and differentiable ray tracing.",
+      "inputs": "Multi-view one-light-at-a-time images from synthetic scenes and a light-stage capture.",
+      "evaluation": "Novel view, material editing, novel-light relighting, and comparisons on a newly captured multi-view multi-light dataset.",
+      "hardware": "NR in inspected primary evidence.",
+      "limitations": "Requires controlled OLAT capture and uses a hybrid non-Gaussian volume for the hardest transport component.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "material_or_light",
+        "efficiency"
+      ],
+      "hardware_fields": [],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "unseen_intervention",
+        "optical_transport"
+      ],
+      "analysis_group": "sensor_media_radiative_imaging"
+    },
+    {
+      "id": "O011",
+      "title": "SpectralGaussians: Semantic, spectral 3D Gaussian splatting for multi-spectral scene representation, visualization and analysis",
+      "url": "https://arxiv.org/abs/2408.06975",
+      "year": 2024,
+      "branch": "physical_optics",
+      "subclass": "media and radiative imaging",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Extends splats to registered multispectral channels, semantic labels, and per-spectrum reflectance/lighting for cross-spectral rendering and editing.",
+      "gaussian_role": "Gaussians carry wavelength-indexed appearance and semantic attributes.",
+      "physical_model": "Spectrum-dependent reflectance and illumination with a physically based spectral shading layer.",
+      "inputs": "Registered multi-view multispectral images and segmentation maps.",
+      "evaluation": "Cross-spectral novel views, spectral reconstruction and segmentation/editing against spectral NeRF baselines.",
+      "hardware": "NR in inspected primary evidence.",
+      "limitations": "Uses a small set of measured bands rather than continuous spectral transport, and accurate registration/calibration is assumed.",
+      "causal_level": 3,
+      "metric_families": [
+        "appearance",
+        "material_or_light",
+        "geometry"
+      ],
+      "hardware_fields": [],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "optical_transport"
+      ],
+      "analysis_group": "sensor_media_radiative_imaging"
+    },
+    {
+      "id": "O012",
+      "title": "Phys3DGS: Physically-based 3D Gaussian Splatting for Inverse Rendering",
+      "url": "https://arxiv.org/abs/2409.10335",
+      "year": 2024,
+      "branch": "physical_optics",
+      "subclass": "inverse rendering and relighting",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Builds a staged physically based inverse-rendering pipeline with explicit normals, material, illumination, and Monte Carlo PBR rendering.",
+      "gaussian_role": "Gaussians encode surface geometry and PBR attributes and are directly rendered with sampled light transport.",
+      "physical_model": "Rendering equation with microfacet BRDF, visibility, direct and indirect illumination.",
+      "inputs": "Posed multi-view RGB images.",
+      "evaluation": "Novel views, normals/material/light decomposition, novel-light relighting and rendering speed at specified samples per pixel.",
+      "hardware": "NVIDIA RTX 4090; stage 1 at most 1 h, stage 2 at most 10 min, PBR optimization about 30 min, and 42.75 FPS at 64 samples per pixel.",
+      "limitations": "Sampled transport increases cost and recovered factors remain non-identifiable from a single unknown illumination.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "material_or_light",
+        "efficiency"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "training_or_fitting_time",
+        "rendering_rate"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "unseen_intervention",
+        "optical_transport"
+      ],
+      "analysis_group": "inverse_rendering_relighting"
+    },
+    {
+      "id": "O013",
+      "title": "GI-GS: Global Illumination Decomposition on Gaussian Splatting for Inverse Rendering",
+      "url": "https://arxiv.org/abs/2410.02619",
+      "year": 2024,
+      "branch": "physical_optics",
+      "subclass": "inverse rendering and relighting",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Separates direct and indirect illumination on splats and models occlusion to improve material-light disentanglement and relighting.",
+      "gaussian_role": "Gaussians store geometry, BRDF parameters, and decomposed illumination components.",
+      "physical_model": "PBR surface shading with explicit direct/global-illumination decomposition and visibility.",
+      "inputs": "Posed multi-view RGB images.",
+      "evaluation": "Intrinsic component accuracy, relighting and NVS on TensoIR and Mip-NeRF 360-style scenes, plus training cost.",
+      "hardware": "GPU model NR in the coded evidence; 27–32 min on TensoIR scenes and 55–64 min on Mip-NeRF 360 scenes are reported.",
+      "limitations": "The indirect-light representation is approximate and factorization remains sensitive to inaccurate geometry and priors.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "material_or_light",
+        "efficiency"
+      ],
+      "hardware_fields": [
+        "training_or_fitting_time"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "unseen_intervention",
+        "optical_transport"
+      ],
+      "analysis_group": "inverse_rendering_relighting"
+    },
+    {
+      "id": "O014",
+      "title": "GS^3: Efficient Relighting with Triple Gaussian Splatting",
+      "url": "https://arxiv.org/abs/2410.11419",
+      "year": 2024,
+      "branch": "physical_optics",
+      "subclass": "inverse rendering and relighting",
+      "publication": "SIGGRAPH Asia 2024; DOI 10.1145/3680528.3687576",
+      "access": "open arXiv preprint plus publisher record",
+      "evidence": "E2 full text",
+      "novelty": "Uses three Gaussian families to model scene geometry, direct lighting, and indirect illumination for efficient relighting.",
+      "gaussian_role": "Separate splat sets encode surface, direct irradiance, and indirect transport.",
+      "physical_model": "PBR surface shading with explicit direct/indirect lighting decomposition.",
+      "inputs": "Multi-view RGB imagery with calibrated poses.",
+      "evaluation": "Novel views, relighting, intrinsic factors, training time and interactive FPS.",
+      "hardware": "Dual AMD EPYC CPUs, 768 GB system RAM, and NVIDIA RTX 4090; 40–70 min training and over 90 FPS are reported.",
+      "limitations": "Multiple splat sets increase storage/optimization complexity and learned transport may not generalize to large geometry changes.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "material_or_light",
+        "efficiency"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "training_or_fitting_time",
+        "rendering_rate",
+        "memory_or_size"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "unseen_intervention",
+        "optical_transport"
+      ],
+      "analysis_group": "inverse_rendering_relighting"
+    },
+    {
+      "id": "O015",
+      "title": "GlossyGS: Inverse Rendering of Glossy Objects with 3D Gaussian Splatting",
+      "url": "https://arxiv.org/abs/2410.13349",
+      "year": 2024,
+      "branch": "physical_optics",
+      "subclass": "inverse rendering and relighting",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Targets high-frequency glossy reflections with geometry-aware normals and a physically structured appearance model while retaining rasterized speed.",
+      "gaussian_role": "Gaussians act as oriented glossy surface elements with material and lighting features.",
+      "physical_model": "Microfacet-inspired glossy BRDF and environment lighting with geometry constraints.",
+      "inputs": "Multi-view RGB images of glossy objects.",
+      "evaluation": "Geometry, NVS, material recovery and relighting on glossy-object datasets, plus direct efficiency comparison.",
+      "hardware": "NVIDIA V100 32 GB; about 1 h optimization and about 30 FPS. The cited prior configuration used 4×A100 for roughly 3 days.",
+      "limitations": "High-frequency lighting-material ambiguity remains difficult, particularly where geometry is weak or reflections dominate all diffuse cues.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "material_or_light",
+        "efficiency"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "vram",
+        "training_or_fitting_time",
+        "rendering_rate"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "unseen_intervention",
+        "optical_transport"
+      ],
+      "analysis_group": "inverse_rendering_relighting"
+    },
+    {
+      "id": "O016",
+      "title": "GeoSplatting: Towards Geometry Guided Gaussian Splatting for Physically-based Inverse Rendering",
+      "url": "https://arxiv.org/abs/2410.24204",
+      "year": 2024,
+      "branch": "physical_optics",
+      "subclass": "inverse rendering and relighting",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Constrains splats to an optimizable mesh so mesh normals, opacity, and ray tracing stabilize material-light decomposition.",
+      "gaussian_role": "Surface-grounded Gaussians carry appearance while an explicit mesh supplies geometry and transport support.",
+      "physical_model": "Mesh-based visibility/ray tracing and PBR material-environment lighting decomposition.",
+      "inputs": "Calibrated multi-view RGB images.",
+      "evaluation": "Geometry, normals, materials, novel views, relighting, training time, and memory at different geometric resolutions.",
+      "hardware": "NVIDIA RTX 4090 24 GB; 15–20 min at 96³ resolution, while 128³ exceeds 1 h and 60 GB memory.",
+      "limitations": "The explicit mesh is a non-Gaussian dependency and higher geometry resolution sharply raises memory and fitting cost.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "material_or_light",
+        "efficiency"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "vram",
+        "training_or_fitting_time",
+        "memory_or_size"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "unseen_intervention",
+        "optical_transport"
+      ],
+      "analysis_group": "inverse_rendering_relighting"
+    },
+    {
+      "id": "O017",
+      "title": "GUS-IR: Gaussian Splatting with Unified Shading for Inverse Rendering",
+      "url": "https://arxiv.org/abs/2411.07478",
+      "year": 2024,
+      "branch": "physical_optics",
+      "subclass": "inverse rendering and relighting",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Unifies forward and deferred shading so rough and glossy materials can share one Gaussian inverse-rendering formulation.",
+      "gaussian_role": "Gaussians carry geometry and intrinsic attributes; forward/deferred branches share the representation.",
+      "physical_model": "PBR shading with material and illumination decomposition, combining primitive- and pixel-space evaluation.",
+      "inputs": "Posed multi-view RGB images.",
+      "evaluation": "NVS, normals, albedo/roughness, relighting, and ablations across scenes with mixed material types.",
+      "hardware": "NR in inspected primary evidence.",
+      "limitations": "Unified shading still uses approximate visibility/global transport and inherits ambiguity from single-light RGB capture.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "material_or_light",
+        "efficiency"
+      ],
+      "hardware_fields": [],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "unseen_intervention",
+        "optical_transport"
+      ],
+      "analysis_group": "inverse_rendering_relighting"
+    },
+    {
+      "id": "O018",
+      "title": "IRGS: Inter-Reflective Gaussian Splatting with 2D Gaussian Ray Tracing",
+      "url": "https://arxiv.org/abs/2412.15867",
+      "year": 2024,
+      "branch": "physical_optics",
+      "subclass": "inverse rendering and relighting",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Adds differentiable 2D-Gaussian ray tracing to inverse rendering so inter-reflection contributes to recovered materials and relighting.",
+      "gaussian_role": "2D Gaussian surfels encode surface/materials and are also the ray-traced transport primitives.",
+      "physical_model": "Rendering equation with direct lighting, visibility, and inter-reflection estimated by Gaussian ray tracing.",
+      "inputs": "Calibrated multi-view RGB images.",
+      "evaluation": "NVS, geometry/material estimation, relighting and inter-reflection ablations.",
+      "hardware": "NVIDIA RTX 3090; about 40 min optimization and roughly 1 s per 256-ray rendered image are reported.",
+      "limitations": "The reported ray-traced evaluation is not real time and finite samples/geometry errors affect secondary transport.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "material_or_light",
+        "efficiency"
+      ],
+      "hardware_fields": [
+        "gpu",
+        "training_or_fitting_time",
+        "rendering_rate"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "unseen_intervention",
+        "optical_transport"
+      ],
+      "analysis_group": "reflection_transmission_transport"
+    },
+    {
+      "id": "O019",
+      "title": "Reflective Gaussian Splatting",
+      "url": "https://arxiv.org/abs/2412.19282",
+      "year": 2024,
+      "branch": "physical_optics",
+      "subclass": "inverse rendering and relighting",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Combines split-sum deferred PBR with Gaussian-grounded inter-reflection and material-aware normal propagation for reflective scenes.",
+      "gaussian_role": "2D Gaussian primitives provide surface geometry, per-pixel PBR attributes, and inter-reflection support.",
+      "physical_model": "Microfacet split-sum shading plus learned/transported inter-reflection.",
+      "inputs": "Posed multi-view RGB images.",
+      "evaluation": "Reflective and non-reflective NVS, geometry/material recovery, relighting, editing and efficiency.",
+      "hardware": "NR in inspected primary evidence.",
+      "limitations": "The split-sum and Gaussian inter-reflection modules approximate full spectral multi-bounce transport.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "material_or_light",
+        "efficiency"
+      ],
+      "hardware_fields": [],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "unseen_intervention",
+        "optical_transport"
+      ],
+      "analysis_group": "reflection_transmission_transport"
+    },
+    {
+      "id": "O020",
+      "title": "SVG-IR: Spatially-Varying Gaussian Splatting for Inverse Rendering",
+      "url": "https://arxiv.org/abs/2504.06815",
+      "year": 2025,
+      "branch": "physical_optics",
+      "subclass": "inverse rendering and relighting",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Lets one Gaussian carry spatially varying normal/material parameters and adds physically based indirect lighting for finer decomposition.",
+      "gaussian_role": "Spatially varying Gaussians act like compact surface patches with per-fragment attributes.",
+      "physical_model": "PBR direct and indirect illumination with a splat-to-fragment shading scheme.",
+      "inputs": "Posed multi-view RGB images.",
+      "evaluation": "NVS, inverse-rendering factors, relighting, PSNR improvements and real-time rendering claims.",
+      "hardware": "NR in inspected primary evidence.",
+      "limitations": "More expressive per-Gaussian parameters raise model complexity, while indirect illumination is still an approximation.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "material_or_light",
+        "efficiency"
+      ],
+      "hardware_fields": [],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "unseen_intervention",
+        "optical_transport"
+      ],
+      "analysis_group": "inverse_rendering_relighting"
+    },
+    {
+      "id": "O021",
+      "title": "TransparentGS: Fast Inverse Rendering of Transparent Objects with Gaussians",
+      "url": "https://arxiv.org/abs/2504.18768",
+      "year": 2025,
+      "branch": "physical_optics",
+      "subclass": "reflection and transmission",
+      "publication": "ACM Transactions on Graphics 2025; DOI 10.1145/3730892",
+      "access": "open arXiv preprint plus publisher record",
+      "evidence": "E2 full text",
+      "novelty": "Optimizes transparent-object shape and optical parameters with Gaussian primitives and differentiable refraction/reflection rendering.",
+      "gaussian_role": "Gaussians parameterize transparent surface geometry and optical material attributes.",
+      "physical_model": "Geometric optics with refraction, reflection, Fresnel behavior, and differentiable ray tracing.",
+      "inputs": "Calibrated multi-view RGB images of transparent objects, with method-specific masks/background assumptions.",
+      "evaluation": "Transparent-object geometry, NVS and optical rendering on synthetic and real captures, plus fitting/render speed.",
+      "hardware": "GPU model NR in the coded evidence; about 1 h fitting and 31–51 FPS are reported.",
+      "limitations": "Transparent inverse rendering remains highly ambiguous; assumptions on interfaces/backgrounds limit general nested or scattering media.",
+      "causal_level": 3,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "material_or_light",
+        "efficiency"
+      ],
+      "hardware_fields": [
+        "training_or_fitting_time",
+        "rendering_rate"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "optical_transport"
+      ],
+      "analysis_group": "reflection_transmission_transport"
+    },
+    {
+      "id": "O022",
+      "title": "RTR-GS: 3D Gaussian Splatting for Inverse Rendering with Radiance Transfer and Reflection",
+      "url": "https://arxiv.org/abs/2507.07733",
+      "year": 2025,
+      "branch": "physical_optics",
+      "subclass": "inverse rendering and relighting",
+      "publication": "ACM Multimedia 2025; DOI 10.1145/3746027.3755197",
+      "access": "open arXiv abstract/preprint plus paywalled ACM venue version",
+      "evidence": "E1 primary abstract/metadata",
+      "novelty": "Combines forward radiance transfer with deferred reflection, then adds a PBR branch to separate BRDF and lighting for arbitrary reflectance.",
+      "gaussian_role": "Gaussians support a hybrid forward/deferred scene representation and carry recovered physical attributes.",
+      "physical_model": "Radiance transfer, deferred reflection, and physically based BRDF-light decomposition.",
+      "inputs": "Multi-view RGB images.",
+      "evaluation": "The primary abstract reports NVS, normal, decomposition, relighting, and efficiency comparisons.",
+      "hardware": "NR in inspected primary evidence.",
+      "limitations": "E1 coding: full protocol and hardware were not inspected, so no detailed performance claims are carried forward.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "material_or_light",
+        "efficiency"
+      ],
+      "hardware_fields": [],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "unseen_intervention",
+        "optical_transport"
+      ],
+      "analysis_group": "inverse_rendering_relighting"
+    },
+    {
+      "id": "O023",
+      "title": "GOGS: High-Fidelity Geometry and Relighting for Glossy Objects via Gaussian Surfels",
+      "url": "https://arxiv.org/abs/2508.14563",
+      "year": 2025,
+      "branch": "physical_optics",
+      "subclass": "inverse rendering and relighting",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E1 primary abstract/metadata",
+      "novelty": "Uses Gaussian surfels, foundation-model geometry priors, Monte Carlo rendering-equation sampling, and 2D-Gaussian ray tracing for glossy inverse rendering.",
+      "gaussian_role": "Gaussian surfels are the surface, material, and ray-tracing representation.",
+      "physical_model": "Split-sum and Monte Carlo rendering-equation evaluation with indirect illumination and anisotropic specular modeling.",
+      "inputs": "Multi-view RGB images of glossy objects.",
+      "evaluation": "The primary abstract reports geometry, material separation, NVS, and relighting comparisons.",
+      "hardware": "NR in inspected primary evidence.",
+      "limitations": "E1 coding; hardware, exact capture conditions, and quantitative protocol were not inspected.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "material_or_light"
+      ],
+      "hardware_fields": [],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "unseen_intervention",
+        "optical_transport"
+      ],
+      "analysis_group": "inverse_rendering_relighting"
+    },
+    {
+      "id": "O024",
+      "title": "GAINS: Gaussian-based Inverse Rendering from Sparse Multi-View Captures",
+      "url": "https://arxiv.org/abs/2512.09925",
+      "year": 2025,
+      "branch": "physical_optics",
+      "subclass": "inverse rendering and relighting",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E1 primary abstract/metadata",
+      "novelty": "Regularizes sparse-view Gaussian inverse rendering with depth, normal, segmentation, intrinsic-decomposition, and diffusion priors.",
+      "gaussian_role": "Gaussians hold geometry and PBR factors stabilized by external foundation-model priors.",
+      "physical_model": "PBR material-light decomposition constrained by learned monocular and diffusion priors.",
+      "inputs": "Sparse calibrated captures ranging from 4 to 32 cameras.",
+      "evaluation": "The primary abstract reports material error, relighting, and novel-view comparisons on synthetic and real objects.",
+      "hardware": "NR in inspected primary evidence.",
+      "limitations": "E1 coding; physical identifiability depends strongly on learned priors and exact hardware/protocol were not inspected.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "material_or_light"
+      ],
+      "hardware_fields": [],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "unseen_intervention",
+        "optical_transport"
+      ],
+      "analysis_group": "inverse_rendering_relighting"
+    },
+    {
+      "id": "O025",
+      "title": "PhyGaP: Physically-Grounded Gaussians with Polarization Cues",
+      "url": "https://arxiv.org/abs/2603.14001",
+      "year": 2026,
+      "branch": "physical_optics",
+      "subclass": "inverse rendering and relighting",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E1 primary abstract/metadata",
+      "novelty": "Adds polarimetric deferred rendering and a self-occlusion-aware environment map to reduce reflection/material ambiguity.",
+      "gaussian_role": "Gaussians carry geometry, normals, and reflection/material attributes estimated from RGB-polarization cues.",
+      "physical_model": "Polarization by reflection, PBR decomposition, and occlusion-aware incident lighting.",
+      "inputs": "Multi-view RGB with full or partial polarization measurements.",
+      "evaluation": "The primary abstract reports appearance, normal, inverse-rendering and relighting results on synthetic and real scenes.",
+      "hardware": "NR in inspected primary evidence.",
+      "limitations": "E1 coding; specialized polarization capture is required and exact runtime/hardware were not inspected.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "material_or_light"
+      ],
+      "hardware_fields": [],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "unseen_intervention",
+        "optical_transport"
+      ],
+      "analysis_group": "inverse_rendering_relighting"
+    },
+    {
+      "id": "O026",
+      "title": "SSD-GS: Scattering and Shadow Decomposition for Relightable 3D Gaussian Splatting",
+      "url": "https://arxiv.org/abs/2604.13333",
+      "year": 2026,
+      "branch": "physical_optics",
+      "subclass": "inverse rendering and relighting",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E1 primary abstract/metadata",
+      "novelty": "Decomposes diffuse, anisotropic specular, shadow, and dipole-based subsurface scattering components for interpretable relighting.",
+      "gaussian_role": "Gaussians carry decomposed surface and scattering attributes used by a progressive PBR optimizer.",
+      "physical_model": "Fresnel-aware anisotropic reflectance, visibility/shadow modeling, and dipole subsurface scattering.",
+      "inputs": "Multi-view multi-light/OLAT imagery.",
+      "evaluation": "The primary abstract reports novel-light relighting and component ablations on an OLAT benchmark.",
+      "hardware": "NR in inspected primary evidence.",
+      "limitations": "E1 coding; full transport assumptions, quantitative protocol, and hardware were not inspected.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "material_or_light"
+      ],
+      "hardware_fields": [],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "unseen_intervention",
+        "optical_transport"
+      ],
+      "analysis_group": "inverse_rendering_relighting"
+    },
+    {
+      "id": "O027",
+      "title": "Mirror-3DGS: Incorporating Mirror Reflections into 3D Gaussian Splatting",
+      "url": "https://arxiv.org/abs/2404.01168",
+      "year": 2024,
+      "branch": "physical_optics",
+      "subclass": "reflection and transmission",
+      "publication": "IEEE VCIP 2024 Oral",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Adds explicit mirror attributes and plane-mirror virtual viewpoints to reconstruct physically coherent reflections in real time.",
+      "gaussian_role": "Separate real and mirrored Gaussian renderings are coupled by an estimated mirror plane.",
+      "physical_model": "Planar mirror imaging and reflected camera geometry.",
+      "inputs": "Posed multi-view RGB images of scenes with planar mirrors.",
+      "evaluation": "Mirror-region and full-image NVS on synthetic and real scenes, including real-time rendering comparisons.",
+      "hardware": "NR in inspected primary evidence.",
+      "limitations": "Assumes planar specular mirrors and does not model rough, curved, refractive, or multi-bounce reflective interfaces.",
+      "causal_level": 2,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "efficiency"
+      ],
+      "hardware_fields": [],
+      "capabilities": [
+        "explicit_state",
+        "optical_transport"
+      ],
+      "analysis_group": "reflection_transmission_transport"
+    },
+    {
+      "id": "O028",
+      "title": "MirrorGaussian: Reflecting 3D Gaussians for Reconstructing Mirror Reflections",
+      "url": "https://arxiv.org/abs/2405.11921",
+      "year": 2024,
+      "branch": "physical_optics",
+      "subclass": "reflection and transmission",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Jointly optimizes a mirror plane and dual real/virtual Gaussian renderings derived from mirror symmetry.",
+      "gaussian_role": "The same Gaussian scene is reflected across an estimated plane and composited with the direct rendering.",
+      "physical_model": "Planar mirror symmetry and dual-view rasterization.",
+      "inputs": "Posed multi-view RGB images with mirror regions.",
+      "evaluation": "Synthetic and real mirror-scene NVS, mirror-plane/region ablations, editing, and real-time rendering.",
+      "hardware": "NR in inspected primary evidence.",
+      "limitations": "Limited to planar mirror geometry; cannot explain rough reflection, transmission, curved mirrors, or general secondary transport.",
+      "causal_level": 2,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "efficiency"
+      ],
+      "hardware_fields": [],
+      "capabilities": [
+        "explicit_state",
+        "optical_transport"
+      ],
+      "analysis_group": "reflection_transmission_transport"
+    },
+    {
+      "id": "O029",
+      "title": "RefGaussian: Disentangling Reflections from 3D Gaussian Splatting for Realistic Rendering",
+      "url": "https://arxiv.org/abs/2406.05852",
+      "year": 2024,
+      "branch": "physical_optics",
+      "subclass": "reflection and transmission",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Separates transmitted and reflected radiance into two spherical-harmonic components with local regularization to prevent reflected content becoming false geometry.",
+      "gaussian_role": "Each Gaussian carries separate transmitted and reflected appearance components.",
+      "physical_model": "Additive reflection/transmission decomposition with view-dependent spherical harmonics; no explicit BRDF or ray tracing.",
+      "inputs": "Posed multi-view RGB images containing total and semi-reflections.",
+      "evaluation": "Novel-view appearance, depth, component separation, scene editing, PSNR/SSIM/LPIPS.",
+      "hardware": "NR in inspected primary evidence.",
+      "limitations": "The component split is regularized rather than physically identified and cannot model refraction, Fresnel coupling, or multi-bounce transport.",
+      "causal_level": 2,
+      "metric_families": [
+        "appearance",
+        "geometry"
+      ],
+      "hardware_fields": [],
+      "capabilities": [
+        "explicit_state"
+      ],
+      "analysis_group": "reflection_transmission_transport"
+    },
+    {
+      "id": "O030",
+      "title": "3D Gaussian Ray Tracing: Fast Tracing of Particle Scenes",
+      "url": "https://arxiv.org/abs/2407.07090",
+      "year": 2024,
+      "branch": "physical_optics",
+      "subclass": "reflection and transmission",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Develops acceleration structures and analytic intersection/sampling machinery for tracing Gaussian particle scenes instead of only rasterizing them.",
+      "gaussian_role": "Gaussians are volumetric particles directly intersected and accumulated along rays.",
+      "physical_model": "Ray-based transmittance and radiance accumulation through anisotropic Gaussian density.",
+      "inputs": "Preconstructed Gaussian scenes and ray queries.",
+      "evaluation": "Rendering correctness, ray-query cost and application-specific performance against rasterization/tracing alternatives.",
+      "hardware": "The primary paper reports representative rates of 78, 190, and 119 FPS for evaluated rendering configurations; the GPU model was not recovered in this coding pass.",
+      "limitations": "It is principally a renderer, not a method for identifying material or lighting physics; rates are workload-specific.",
+      "causal_level": 2,
+      "metric_families": [
+        "appearance",
+        "efficiency"
+      ],
+      "hardware_fields": [
+        "rendering_rate"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "optical_transport"
+      ],
+      "analysis_group": "reflection_transmission_transport"
+    },
+    {
+      "id": "O031",
+      "title": "TranSplat: Instant Object Relighting in Gaussian Splatting via Spherical Harmonic Radiance Transfer",
+      "url": "https://arxiv.org/abs/2503.22676",
+      "year": 2025,
+      "branch": "physical_optics",
+      "subclass": "reflection and transmission",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E1 primary abstract/metadata",
+      "novelty": "Stores spherical-harmonic radiance-transfer coefficients on splats for instantaneous relighting under novel environment illumination.",
+      "gaussian_role": "Gaussians carry object appearance and compact precomputed transport coefficients.",
+      "physical_model": "Spherical-harmonic precomputed radiance transfer.",
+      "inputs": "A reconstructed Gaussian object and environment illumination.",
+      "evaluation": "The primary abstract reports relighting fidelity and interactive performance.",
+      "hardware": "NR in inspected primary evidence.",
+      "limitations": "E1 coding; full transport bandwidth, editability constraints, hardware and quantitative protocol were not inspected.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "material_or_light",
+        "efficiency"
+      ],
+      "hardware_fields": [],
+      "capabilities": [
+        "explicit_state",
+        "unseen_intervention",
+        "optical_transport"
+      ],
+      "analysis_group": "reflection_transmission_transport"
+    },
+    {
+      "id": "O032",
+      "title": "RT-GS: Gaussian Splatting with Reflection and Transmittance Primitives",
+      "url": "https://arxiv.org/abs/2604.00509",
+      "year": 2026,
+      "branch": "physical_optics",
+      "subclass": "reflection and transmission",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E1 primary abstract/metadata",
+      "novelty": "Uses separate Gaussian primitive sets for reflected and transmitted appearance, coupled through microfacet shading and differentiable ray tracing.",
+      "gaussian_role": "Reflection and transmittance Gaussians explicitly represent the two optical paths.",
+      "physical_model": "Microfacet reflection, transmittance, and differentiable ray tracing.",
+      "inputs": "Multi-view RGB observations of semi-transparent specular scenes.",
+      "evaluation": "The primary abstract reports qualitative and quantitative NVS on scenes where reflection and through-surface content coexist.",
+      "hardware": "NR in inspected primary evidence.",
+      "limitations": "E1 coding; exact interface assumptions, hardware, and generality to nested refractive/scattering media were not inspected.",
+      "causal_level": 2,
+      "metric_families": [
+        "appearance",
+        "geometry"
+      ],
+      "hardware_fields": [],
+      "capabilities": [
+        "explicit_state",
+        "optical_transport"
+      ],
+      "analysis_group": "reflection_transmission_transport"
+    },
+    {
+      "id": "O033",
+      "title": "RT-Splatting: Joint Reflection-Transmission Modeling with Gaussian Splatting",
+      "url": "https://arxiv.org/abs/2605.18263",
+      "year": 2026,
+      "branch": "physical_optics",
+      "subclass": "reflection and transmission",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E1 primary abstract/metadata",
+      "novelty": "Factors geometric occupancy from optical opacity and combines surface reflection with volume transmission in one Gaussian representation.",
+      "gaussian_role": "One Gaussian set is interpreted both as a surface for high-frequency reflection and a volume for transmission.",
+      "physical_model": "Hybrid surface-volume optics with reflection/transmission decomposition and specular-aware gradient gating.",
+      "inputs": "Multi-view RGB images of semi-transparent, specular scenes.",
+      "evaluation": "The primary abstract reports reflection/transmission quality, NVS, real-time rendering and editing.",
+      "hardware": "NR in inspected primary evidence.",
+      "limitations": "E1 coding; the exact physical interface model and hardware were not inspected, and gradient gating is an optimization prior rather than a conservation law.",
+      "causal_level": 2,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "efficiency"
+      ],
+      "hardware_fields": [],
+      "capabilities": [
+        "explicit_state",
+        "optical_transport"
+      ],
+      "analysis_group": "reflection_transmission_transport"
+    },
+    {
+      "id": "O034",
+      "title": "RefracGS: Novel View Synthesis Through Refractive Water Surfaces with 3D Gaussian Ray Tracing",
+      "url": "https://arxiv.org/abs/2603.21695",
+      "year": 2026,
+      "branch": "physical_optics",
+      "subclass": "reflection and transmission",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E1 primary abstract/metadata",
+      "novelty": "Models camera rays refracted by a water interface before tracing a Gaussian scene, targeting views observed through moving or shaped water surfaces.",
+      "gaussian_role": "Gaussians represent the submerged scene and are queried by refracted rays.",
+      "physical_model": "Geometric refraction through a water-air interface and Gaussian ray tracing.",
+      "inputs": "Multi-view imagery observed through refractive water surfaces.",
+      "evaluation": "The primary abstract reports NVS comparisons on refractive-water datasets.",
+      "hardware": "NR in inspected primary evidence.",
+      "limitations": "E1 coding; interface reconstruction, caustics, participating-media scattering, exact runtime and hardware were not inspected.",
+      "causal_level": 2,
+      "metric_families": [
+        "appearance",
+        "geometry"
+      ],
+      "hardware_fields": [],
+      "capabilities": [
+        "explicit_state",
+        "optical_transport"
+      ],
+      "analysis_group": "reflection_transmission_transport"
+    },
+    {
+      "id": "O035",
+      "title": "StochasticSplats: Stochastic Rasterization for Sorting-Free 3D Gaussian Splatting",
+      "url": "https://arxiv.org/abs/2503.24366",
+      "year": 2025,
+      "branch": "physical_optics",
+      "subclass": "media and radiative imaging",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Replaces depth sorting with an unbiased Monte Carlo estimator of the volume-rendering equation and exposes a sample-count quality/cost control.",
+      "gaussian_role": "Gaussians are participating volume primitives sampled stochastically in an OpenGL renderer.",
+      "physical_model": "Monte Carlo estimation of the volume-rendering equation and transmittance through overlapping Gaussians.",
+      "inputs": "Existing Gaussian scenes plus a user-selected sample count.",
+      "evaluation": "Appearance error/artifacts, rendering cost versus sample count, and comparison with sorted rasterization.",
+      "hardware": "Implemented with OpenGL shaders; at a stated reasonable quality the paper reports more than 4× the speed of sorted rasterization, but no absolute hardware-normalized rate is coded.",
+      "limitations": "It improves numerical rendering consistency rather than estimating real scene physics; stochastic noise and workload-dependent convergence remain.",
+      "causal_level": 2,
+      "metric_families": [
+        "appearance",
+        "efficiency"
+      ],
+      "hardware_fields": [],
+      "capabilities": [
+        "explicit_state",
+        "optical_transport"
+      ],
+      "analysis_group": "reflection_transmission_transport"
+    },
+    {
+      "id": "O036",
+      "title": "WaterSplatting: Fast Underwater 3D Scene Reconstruction Using Gaussian Splatting",
+      "url": "https://arxiv.org/abs/2408.08206",
+      "year": 2024,
+      "branch": "physical_optics",
+      "subclass": "media and radiative imaging",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Embeds a depth-dependent underwater image-formation model in 3DGS to separate scene radiance from attenuation and backscatter.",
+      "gaussian_role": "Gaussians represent scene geometry/radiance while global or spatial medium parameters explain water degradation.",
+      "physical_model": "Underwater formation with wavelength-dependent attenuation and backscatter.",
+      "inputs": "Posed underwater RGB images.",
+      "evaluation": "Underwater NVS and restoration on synthetic and real sequences using PSNR/SSIM/LPIPS and qualitative color/depth analyses.",
+      "hardware": "NR in inspected primary evidence.",
+      "limitations": "Assumes a simplified medium model and calibrated poses; spatially heterogeneous water, caustics, and dynamic particles are weakly covered.",
+      "causal_level": 3,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "parameter_error",
+        "efficiency"
+      ],
+      "hardware_fields": [],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "optical_transport"
+      ],
+      "analysis_group": "sensor_media_radiative_imaging"
+    },
+    {
+      "id": "O037",
+      "title": "SeaSplat: Representing Underwater Scenes with 3D Gaussian Splatting and a Physically Grounded Image Formation Model",
+      "url": "https://arxiv.org/abs/2409.17345",
+      "year": 2024,
+      "branch": "physical_optics",
+      "subclass": "media and radiative imaging",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Jointly reconstructs scene Gaussians and a physically grounded underwater attenuation/backscatter field instead of baking haze into color.",
+      "gaussian_role": "Gaussians carry clear-scene radiance and geometry; an explicit water model maps them to observed pixels.",
+      "physical_model": "Depth- and wavelength-dependent direct transmission plus veiling/backscatter.",
+      "inputs": "Calibrated multi-view underwater RGB images.",
+      "evaluation": "NVS, recovered clear appearance, depth/medium ablations and comparison across synthetic and real underwater scenes.",
+      "hardware": "NR in inspected primary evidence.",
+      "limitations": "The reduced underwater model cannot fully capture multiple scattering, dynamic illumination, particulate transients, or severe pose uncertainty.",
+      "causal_level": 3,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "parameter_error"
+      ],
+      "hardware_fields": [],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "optical_transport"
+      ],
+      "analysis_group": "sensor_media_radiative_imaging"
+    },
+    {
+      "id": "O038",
+      "title": "DehazeGS: Seeing Through Fog with 3D Gaussian Splatting",
+      "url": "https://arxiv.org/abs/2501.03659",
+      "year": 2025,
+      "branch": "physical_optics",
+      "subclass": "media and radiative imaging",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E2 full text",
+      "novelty": "Integrates atmospheric scattering into Gaussian rendering so scene radiance and haze can be optimized jointly from foggy multi-view images.",
+      "gaussian_role": "Gaussians encode clear-scene geometry/radiance and are rendered through an estimated haze field.",
+      "physical_model": "Atmospheric scattering with transmission and airlight/backscatter terms.",
+      "inputs": "Posed multi-view images captured in fog or haze.",
+      "evaluation": "Dehazed NVS, depth/geometry, synthetic parameter recovery and real-scene appearance comparisons.",
+      "hardware": "NR in inspected primary evidence.",
+      "limitations": "Homogeneous or low-dimensional haze assumptions do not capture turbulent, spatially varying, or multiple-scattering fog.",
+      "causal_level": 3,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "parameter_error"
+      ],
+      "hardware_fields": [],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "optical_transport"
+      ],
+      "analysis_group": "sensor_media_radiative_imaging"
+    },
+    {
+      "id": "O039",
+      "title": "Radiative Gaussian Splatting for Efficient X-ray Novel View Synthesis",
+      "url": "https://arxiv.org/abs/2403.04116",
+      "year": 2024,
+      "branch": "physical_optics",
+      "subclass": "media and radiative imaging",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E1 primary abstract/metadata",
+      "novelty": "Reformulates splatting for X-ray radiative projection, replacing opaque alpha compositing with attenuation-consistent line integration.",
+      "gaussian_role": "Gaussians parameterize volumetric attenuation and are analytically projected into X-ray images.",
+      "physical_model": "Beer–Lambert attenuation along X-ray paths.",
+      "inputs": "Calibrated multi-view X-ray projections.",
+      "evaluation": "The primary abstract reports X-ray NVS quality and efficiency versus radiance-field baselines.",
+      "hardware": "X-ray projection imagery is the required sensor setup; exact scanner/GPU details were not coded from full text.",
+      "limitations": "E1 coding; it targets projection synthesis rather than a general diagnostic CT reconstruction guarantee, and full hardware/protocol were not inspected.",
+      "causal_level": 3,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "efficiency"
+      ],
+      "hardware_fields": [
+        "sensor_setup"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "optical_transport"
+      ],
+      "analysis_group": "sensor_media_radiative_imaging"
+    },
+    {
+      "id": "O040",
+      "title": "R²-Gaussian: Rectifying Radiative Gaussian Splatting for Tomographic Reconstruction",
+      "url": "https://arxiv.org/abs/2405.20693",
+      "year": 2024,
+      "branch": "physical_optics",
+      "subclass": "media and radiative imaging",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E1 primary abstract/metadata",
+      "novelty": "Rectifies radiative Gaussian projection and optimization for sparse-view tomographic reconstruction rather than only X-ray view synthesis.",
+      "gaussian_role": "Gaussians are the reconstructable volumetric attenuation basis.",
+      "physical_model": "Beer–Lambert/X-ray transform with differentiable Gaussian line integrals.",
+      "inputs": "Sparse calibrated X-ray or CT projections.",
+      "evaluation": "The primary abstract reports tomographic reconstruction fidelity under projection sparsity and efficiency comparisons.",
+      "hardware": "Tomographic projection data are the required sensor setup; scanner and GPU details were not coded from full text.",
+      "limitations": "E1 coding; clinical validity, uncertainty, hardware and full acquisition protocol were not inspected.",
+      "causal_level": 3,
+      "metric_families": [
+        "geometry",
+        "parameter_error",
+        "efficiency"
+      ],
+      "hardware_fields": [
+        "sensor_setup"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "optical_transport"
+      ],
+      "analysis_group": "sensor_media_radiative_imaging"
+    },
+    {
+      "id": "O041",
+      "title": "Thermal3D-GS: Physics-induced 3D Gaussians for Thermal Infrared Novel-view Synthesis",
+      "url": "https://arxiv.org/abs/2409.08042",
+      "year": 2024,
+      "branch": "physical_optics",
+      "subclass": "media and radiative imaging",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E1 primary abstract/metadata",
+      "novelty": "Introduces thermal-physics-informed Gaussian attributes and RGB–thermal coupling for infrared novel-view synthesis.",
+      "gaussian_role": "Gaussians jointly encode geometry and modality-specific visible/thermal radiance.",
+      "physical_model": "Thermal emission/appearance constraints used to regularize cross-modal Gaussian reconstruction.",
+      "inputs": "Calibrated RGB and thermal infrared multi-view images.",
+      "evaluation": "The primary abstract reports thermal NVS and cross-modal reconstruction comparisons.",
+      "hardware": "A paired or registered RGB–thermal capture setup is required; exact camera models and compute were not coded from full text.",
+      "limitations": "E1 coding; the extent of explicit heat/radiative transport versus learned thermal appearance and hardware details were not fully inspected.",
+      "causal_level": 2,
+      "metric_families": [
+        "appearance",
+        "geometry"
+      ],
+      "hardware_fields": [
+        "sensor_setup"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "optical_transport"
+      ],
+      "analysis_group": "sensor_media_radiative_imaging"
+    },
+    {
+      "id": "O042",
+      "title": "GS-DOT: Gaussian splatting-based image reconstruction for diffuse optical tomography",
+      "url": "https://arxiv.org/abs/2604.23675",
+      "year": 2026,
+      "branch": "physical_optics",
+      "subclass": "media and radiative imaging",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E1 primary abstract/metadata",
+      "novelty": "Represents absorption as sparse anisotropic Gaussians and differentiates through photon-diffusion response functions for diffuse optical tomography.",
+      "gaussian_role": "Gaussians are the unknown absorption-coefficient field optimized against time-resolved optical measurements.",
+      "physical_model": "Photon diffusion in highly scattering media, replacing ray transport with diffusion Green functions.",
+      "inputs": "Time-resolved source-detector point-spread functions.",
+      "evaluation": "The primary abstract reports localization, absorption quantification, noise robustness and memory reduction on synthetic tissue models.",
+      "hardware": "A time-resolved diffuse-optical measurement geometry is assumed; exact instrumentation and compute were not inspected.",
+      "limitations": "E1 coding; validation is synthetic, the diffusion approximation has regime limits, and full runtime/hardware are unavailable.",
+      "causal_level": 3,
+      "metric_families": [
+        "geometry",
+        "parameter_error",
+        "efficiency"
+      ],
+      "hardware_fields": [
+        "sensor_setup",
+        "memory_or_size"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "optical_transport"
+      ],
+      "analysis_group": "sensor_media_radiative_imaging"
+    },
+    {
+      "id": "O043",
+      "title": "Inverse Radiative Transport for Infrared Scenes with Gaussian Primitives",
+      "url": "https://doi.org/10.1145/3757377.3763938",
+      "year": 2025,
+      "branch": "physical_optics",
+      "subclass": "media and radiative imaging",
+      "publication": "SIGGRAPH Asia 2025 Conference Papers; DOI 10.1145/3757377.3763938",
+      "access": "paywalled ACM record plus open author manuscript",
+      "evidence": "E2 full text",
+      "novelty": "Solves inverse long-wave infrared transport on 2D Gaussian surfels, separating self-emission from reflected thermal radiation and enabling re-heating interventions.",
+      "gaussian_role": "2D Gaussians represent surfaces and carry temperature, emissivity, roughness, diffuse coefficient, and a spherical-Gaussian radiance cache.",
+      "physical_model": "Stefan–Boltzmann/Kirchhoff gray-body emission and reflection, radiosity, hemicube visibility, and spherical-Gaussian outgoing radiance.",
+      "inputs": "300 paired RGB–thermal images across three radiator temperatures in the HiGS dataset, plus synthetic scenes.",
+      "evaluation": "Synthetic and real thermal rendering, reflection/emission separation, material/temperature recovery, and moved/reheated source tests.",
+      "hardware": "Paired RGB and thermal cameras plus a controllable radiator are reported; compute hardware was not recovered in the inspected evidence.",
+      "limitations": "Assumes steady state, constant emissivity across the LWIR band, gray-body behavior, and simplified surface reflection; conduction/convection are out of scope.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "material_or_light",
+        "parameter_error"
+      ],
+      "hardware_fields": [
+        "sensor_setup"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "unseen_intervention",
+        "optical_transport"
+      ],
+      "analysis_group": "sensor_media_radiative_imaging"
+    },
+    {
+      "id": "O044",
+      "title": "Dynamic Global Illumination for Interactive Gaussian Splatting Scenes in Real Time",
+      "url": "https://doi.org/10.1109/TVCG.2026.3689199",
+      "year": 2026,
+      "branch": "physical_optics",
+      "subclass": "media and radiative imaging",
+      "publication": "IEEE Transactions on Visualization and Computer Graphics 2026; DOI 10.1109/TVCG.2026.3689199",
+      "access": "paywalled IEEE publisher record; no open preprint recovered",
+      "evidence": "E1 primary abstract/metadata",
+      "novelty": "Builds a real-time global-illumination pipeline for mixed Gaussian/mesh scenes using compound stochastic ray tracing and a hardware Gaussian rasterizer.",
+      "gaussian_role": "Gaussians are editable surface-light-transport primitives that coexist with conventional meshes.",
+      "physical_model": "Multi-bounce diffuse and one-bounce glossy global illumination for area, directional, and environment lights.",
+      "inputs": "Interactive 3D Gaussian and hybrid mesh/Gaussian scenes with editable materials and lights.",
+      "evaluation": "The publisher abstract reports real-time rendering across interactive/dynamic scene configurations.",
+      "hardware": "NR in inspected primary evidence.",
+      "limitations": "E1 publisher-only coding; exact hardware, rates, image-quality protocol and approximation error were not accessible.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "efficiency"
+      ],
+      "hardware_fields": [],
+      "capabilities": [
+        "explicit_state",
+        "unseen_intervention",
+        "optical_transport"
+      ],
+      "analysis_group": "reflection_transmission_transport"
+    },
+    {
+      "id": "O045",
+      "title": "Efficient Object Reconstruction with Differentiable Area Light Shading",
+      "url": "https://doi.org/10.1145/3757377.3763865",
+      "year": 2025,
+      "branch": "physical_optics",
+      "subclass": "inverse rendering and relighting",
+      "publication": "SIGGRAPH Asia 2025 Conference Papers; DOI 10.1145/3757377.3763865",
+      "access": "paywalled ACM record plus open author manuscript",
+      "evidence": "E2 full text",
+      "novelty": "Uses active area lighting and differentiable linearly transformed cosines so Gaussian inverse rendering recovers roughness with fewer photographs.",
+      "gaussian_role": "A 3D Gaussian object pipeline is one of the two tested differentiable surface representations carrying recovered BRDF/geometry.",
+      "physical_model": "Area-light rendering, BRDF estimation, shadow visibility weighting, and linearly transformed cosines.",
+      "inputs": "Controlled photographs under active area or point lighting.",
+      "evaluation": "BRDF/material error, relighting PSNR, photo count and optimization time; area light gives about +3 dB or one-fifth the photos, and LTC improves optimization time by 25%.",
+      "hardware": "Controlled area-light capture is reported; compute hardware was not recovered in this coding pass.",
+      "limitations": "Requires active calibrated lighting and the paper evaluates both mesh and Gaussian pipelines, so some conclusions are representation-independent.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "material_or_light",
+        "parameter_error",
+        "efficiency"
+      ],
+      "hardware_fields": [
+        "sensor_setup"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "unseen_intervention",
+        "optical_transport"
+      ],
+      "analysis_group": "inverse_rendering_relighting"
+    },
+    {
+      "id": "O046",
+      "title": "Arbitrary Optics for Gaussian Splatting Using Space Warping",
+      "url": "https://doi.org/10.3390/jimaging10120330",
+      "year": 2024,
+      "branch": "physical_optics",
+      "subclass": "camera and sensor image formation",
+      "publication": "Journal of Imaging 10(12), 330 (2024); DOI 10.3390/jimaging10120330",
+      "access": "open-access publisher full text",
+      "evidence": "E2 full text",
+      "novelty": "Warps the Gaussian scene differentiably to support highly distorted fisheye and other non-pinhole optics without pre-undistortion.",
+      "gaussian_role": "Gaussians are transformed by a calibrated differentiable optical warping function before rasterization.",
+      "physical_model": "General camera projection/distortion expressed as differentiable space warping.",
+      "inputs": "Multi-view images acquired with arbitrary/fisheye optics and camera calibration.",
+      "evaluation": "Synthetic and real distorted-image reconstruction, NVS appearance, and geometric behavior.",
+      "hardware": "Fisheye/high-distortion camera optics are explicitly evaluated; exact compute setup was not coded.",
+      "limitations": "Targets geometric optics/projection rather than diffraction, aberration PSFs, exposure, sensor noise, or unknown-lens joint calibration.",
+      "causal_level": 2,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "efficiency"
+      ],
+      "hardware_fields": [
+        "sensor_setup"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "optical_transport"
+      ],
+      "analysis_group": "sensor_media_radiative_imaging"
+    },
+    {
+      "id": "O047",
+      "title": "HDRGS: High Dynamic Range Gaussian Splatting",
+      "url": "https://arxiv.org/abs/2408.06543",
+      "year": 2024,
+      "branch": "physical_optics",
+      "subclass": "camera and sensor image formation",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E1 primary abstract/metadata",
+      "novelty": "Reconstructs HDR Gaussian radiance from multi-exposure LDR views using luminance-aware features, an asymmetric tone-mapping grid, and coarse-to-fine fitting.",
+      "gaussian_role": "Gaussians represent HDR scene radiance; a learned camera/tone-mapping module maps irradiance to LDR pixels.",
+      "physical_model": "Exposure-dependent radiometric formation and learned camera response/tone mapping.",
+      "inputs": "Unstructured multi-view LDR images with varying exposures.",
+      "evaluation": "The primary abstract reports HDR reconstruction and NVS on synthetic and real scenes, including convergence analyses.",
+      "hardware": "A multi-exposure LDR capture setup is required; exact GPU and timing were not inspected.",
+      "limitations": "E1 coding; learned tone mapping may not identify a transferable physical camera response and full hardware/protocol were not inspected.",
+      "causal_level": 3,
+      "metric_families": [
+        "appearance",
+        "parameter_error",
+        "efficiency"
+      ],
+      "hardware_fields": [
+        "sensor_setup"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "optical_transport"
+      ],
+      "analysis_group": "sensor_media_radiative_imaging"
+    },
+    {
+      "id": "O048",
+      "title": "Cinematic Gaussians: Real-Time HDR Radiance Fields with Depth of Field",
+      "url": "https://arxiv.org/abs/2406.07329",
+      "year": 2024,
+      "branch": "physical_optics",
+      "subclass": "camera and sensor image formation",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E1 primary abstract/metadata",
+      "novelty": "Jointly reconstructs HDR radiance and controllable depth of field using analytical Gaussian convolution under a thin-lens camera model.",
+      "gaussian_role": "Gaussians encode HDR radiance and admit analytical aperture/defocus convolution.",
+      "physical_model": "Thin-lens depth of field, exposure variation, and tone mapping.",
+      "inputs": "Multi-view LDR images with varying exposure, aperture, and focus distance.",
+      "evaluation": "The primary abstract reports HDR/defocus reconstruction, refocusing, NVS, and real-time cinematic rendering.",
+      "hardware": "Capture varies exposure time, aperture and focus distance; exact camera/GPU details were not inspected.",
+      "limitations": "E1 coding; the thin-lens model omits complex aberrations, diffraction, rolling shutter and sensor noise.",
+      "causal_level": 3,
+      "metric_families": [
+        "appearance",
+        "parameter_error",
+        "efficiency"
+      ],
+      "hardware_fields": [
+        "sensor_setup"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "unseen_intervention",
+        "optical_transport"
+      ],
+      "analysis_group": "sensor_media_radiative_imaging"
+    },
+    {
+      "id": "O049",
+      "title": "Gaussian Splatting on the Move: Blur and Rolling Shutter Compensation for Natural Camera Motion",
+      "url": "https://arxiv.org/abs/2403.13327",
+      "year": 2024,
+      "branch": "physical_optics",
+      "subclass": "camera and sensor image formation",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E1 primary abstract/metadata",
+      "novelty": "Differentiably integrates time-varying camera pose during exposure to model motion blur and rolling shutter, initialized by visual-inertial odometry.",
+      "gaussian_role": "A static Gaussian scene is rendered repeatedly/approximately along a continuous exposure-time camera trajectory.",
+      "physical_model": "Temporal exposure integration, rolling-shutter row timing, and continuous camera motion.",
+      "inputs": "Handheld video with motion blur and rolling shutter plus VIO velocity/pose estimates.",
+      "evaluation": "The primary abstract reports synthetic and real reconstruction/NVS under natural camera motion.",
+      "hardware": "A handheld rolling-shutter camera and visual-inertial odometry are used; exact compute hardware was not inspected.",
+      "limitations": "E1 coding; assumes a mostly static scene and adequate VIO, and does not model full sensor response or independently moving objects.",
+      "causal_level": 3,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "parameter_error"
+      ],
+      "hardware_fields": [
+        "sensor_setup"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "optical_transport"
+      ],
+      "analysis_group": "sensor_media_radiative_imaging"
+    },
+    {
+      "id": "O050",
+      "title": "Every Camera Effect, Every Time, All at Once: 4D Gaussian Ray Tracing for Physics-based Camera Effect Data Generation",
+      "url": "https://arxiv.org/abs/2509.10759",
+      "year": 2025,
+      "branch": "physical_optics",
+      "subclass": "camera and sensor image formation",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E1 primary abstract/metadata",
+      "novelty": "Ray traces reconstructed 4D Gaussian scenes to generate controllable dynamic videos with fisheye, rolling-shutter, and other physical camera effects.",
+      "gaussian_role": "4D Gaussians encode dynamic geometry/radiance and are the scene queried by an effect-aware ray tracer.",
+      "physical_model": "Physics-based camera rays and time sampling for lens distortion, rolling shutter, motion/defocus effects.",
+      "inputs": "Multi-view videos used to reconstruct a dynamic scene, followed by user-specified virtual camera effects.",
+      "evaluation": "The primary abstract reports quality/speed and an eight-scene benchmark spanning four camera effects.",
+      "hardware": "NR in inspected primary evidence.",
+      "limitations": "E1 coding; it generates training data rather than identifying real camera parameters, and exact hardware/effect fidelity were not inspected.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "efficiency",
+        "task_outcome"
+      ],
+      "hardware_fields": [],
+      "capabilities": [
+        "explicit_state",
+        "unseen_intervention",
+        "optical_transport"
+      ],
+      "analysis_group": "sensor_media_radiative_imaging"
+    },
+    {
+      "id": "O051",
+      "title": "E2GS: Event Enhanced Gaussian Splatting",
+      "url": "https://arxiv.org/abs/2406.14978",
+      "year": 2024,
+      "branch": "physical_optics",
+      "subclass": "camera and sensor image formation",
+      "publication": "IEEE ICIP 2024",
+      "access": "open arXiv full text",
+      "evidence": "E1 primary abstract/metadata",
+      "novelty": "Fuses event measurements with blurred frames to supervise Gaussian reconstruction and deblur fast-motion imagery.",
+      "gaussian_role": "Gaussians represent scene radiance; an event/frame observation model supplies complementary supervision.",
+      "physical_model": "Event-camera brightness-change measurements coupled to blurred frame formation.",
+      "inputs": "Synchronized event streams and blurry intensity images.",
+      "evaluation": "The primary abstract reports synthetic/real deblurring, NVS, training efficiency, and 140 FPS rendering.",
+      "hardware": "A frame-plus-event camera setup is required; 140 FPS is reported, but the GPU model was not inspected.",
+      "limitations": "E1 coding; relies on synchronized hybrid sensing and event contrast/noise calibration; full compute details were not inspected.",
+      "causal_level": 2,
+      "metric_families": [
+        "appearance",
+        "efficiency"
+      ],
+      "hardware_fields": [
+        "sensor_setup",
+        "rendering_rate"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "optical_transport"
+      ],
+      "analysis_group": "sensor_media_radiative_imaging"
+    },
+    {
+      "id": "O052",
+      "title": "Ev-GS: Event-based Gaussian splatting for Efficient and Accurate Radiance Field Rendering",
+      "url": "https://arxiv.org/abs/2407.11343",
+      "year": 2024,
+      "branch": "physical_optics",
+      "subclass": "camera and sensor image formation",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E1 primary abstract/metadata",
+      "novelty": "Infers a Gaussian radiance field from a monocular event camera with pure event supervision, targeting fast motion and low light.",
+      "gaussian_role": "Gaussians are optimized from accumulated brightness-change events rather than conventional frames.",
+      "physical_model": "Event-generation response based on log-intensity changes.",
+      "inputs": "Monocular asynchronous event streams and camera poses.",
+      "evaluation": "The primary abstract reports NVS quality, blur reduction, reconstruction efficiency, and computing occupancy.",
+      "hardware": "A monocular event camera is required; exact sensor and GPU models were not inspected.",
+      "limitations": "E1 coding; event thresholds/noise and pose estimation can bias reconstruction, and absolute radiance is weakly observed.",
+      "causal_level": 2,
+      "metric_families": [
+        "appearance",
+        "efficiency"
+      ],
+      "hardware_fields": [
+        "sensor_setup"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "optical_transport"
+      ],
+      "analysis_group": "sensor_media_radiative_imaging"
+    },
+    {
+      "id": "O053",
+      "title": "EventSplat: 3D Gaussian Splatting from Moving Event Cameras for Real-time Rendering",
+      "url": "https://arxiv.org/abs/2412.07293",
+      "year": 2024,
+      "branch": "physical_optics",
+      "subclass": "camera and sensor image formation",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E1 primary abstract/metadata",
+      "novelty": "Initializes Gaussian reconstruction with an event-to-video prior and fits spline camera trajectories for fast moving event cameras.",
+      "gaussian_role": "Gaussians encode scene radiance reconstructed from asynchronous events and prior-generated intensity cues.",
+      "physical_model": "Event response plus continuous-time spline camera motion.",
+      "inputs": "Moving event-camera streams and estimated poses.",
+      "evaluation": "The primary abstract reports NVS fidelity and order-of-magnitude rendering speed over event-NeRF approaches.",
+      "hardware": "A moving event camera is required; exact sensor/GPU details and absolute render rates were not inspected.",
+      "limitations": "E1 coding; depends on an event-to-video prior that can inject appearance bias and on reliable trajectory estimation.",
+      "causal_level": 2,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "efficiency"
+      ],
+      "hardware_fields": [
+        "sensor_setup"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "optical_transport"
+      ],
+      "analysis_group": "sensor_media_radiative_imaging"
+    },
+    {
+      "id": "O054",
+      "title": "SweepEvGS: Event-Based 3D Gaussian Splatting for Macro and Micro Radiance Field Rendering from a Single Sweep",
+      "url": "https://arxiv.org/abs/2412.11579",
+      "year": 2024,
+      "branch": "physical_optics",
+      "subclass": "camera and sensor image formation",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E1 primary abstract/metadata",
+      "novelty": "Reconstructs macro- and micro-scale Gaussian radiance fields from one continuous event-camera sweep.",
+      "gaussian_role": "Gaussians are optimized from high-temporal-resolution event observations collected along a single trajectory.",
+      "physical_model": "Event brightness-change formation and continuous camera sweep geometry.",
+      "inputs": "A single calibrated moving event-camera sweep.",
+      "evaluation": "The primary abstract reports rendering quality and efficiency across macro/micro scenes.",
+      "hardware": "A moving event-camera capture is required; exact sensor and compute setup were not inspected.",
+      "limitations": "E1 coding; coverage from one sweep and event calibration bound geometry/appearance completeness.",
+      "causal_level": 2,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "efficiency"
+      ],
+      "hardware_fields": [
+        "sensor_setup"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "optical_transport"
+      ],
+      "analysis_group": "sensor_media_radiative_imaging"
+    },
+    {
+      "id": "O055",
+      "title": "PolarGS: Polarimetric Cues for Ambiguity-Free Gaussian Splatting with Accurate Geometry Recovery",
+      "url": "https://arxiv.org/abs/2512.00794",
+      "year": 2025,
+      "branch": "physical_optics",
+      "subclass": "camera and sensor image formation",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E1 primary abstract/metadata",
+      "novelty": "Uses degree and angle of linear polarization to correct reflective photometry and densify textureless geometry.",
+      "gaussian_role": "Gaussians are color-corrected and densified using polarimetric orientation cues.",
+      "physical_model": "Polarization by reflection encoded through DoLP/AoLP constraints and polarization-guided PatchMatch.",
+      "inputs": "Multi-view RGB and polarization measurements.",
+      "evaluation": "The primary abstract reports geometry and appearance improvements in reflective and textureless regions.",
+      "hardware": "A polarization-capable camera/capture is required; exact sensor and compute models were not inspected.",
+      "limitations": "E1 coding; polarization ambiguities, partial polarization and specialized sensing constrain general use.",
+      "causal_level": 3,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "parameter_error"
+      ],
+      "hardware_fields": [
+        "sensor_setup"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "parameter_id",
+        "optical_transport"
+      ],
+      "analysis_group": "sensor_media_radiative_imaging"
+    },
+    {
+      "id": "O056",
+      "title": "Flash-Splat: 3D Reflection Removal with Flash Cues and Gaussian Splats",
+      "url": "https://arxiv.org/abs/2410.02764",
+      "year": 2024,
+      "branch": "physical_optics",
+      "subclass": "camera and sensor image formation",
+      "publication": "arXiv preprint",
+      "access": "open arXiv full text",
+      "evidence": "E1 primary abstract/metadata",
+      "novelty": "Uses unpaired flash/no-flash observations and Gaussian novel-view consistency to separate transmitted and reflected 3D scenes.",
+      "gaussian_role": "Separate Gaussian representations reconstruct transmitted and reflected scene components.",
+      "physical_model": "Illumination intervention through flash/no-flash reflection separation.",
+      "inputs": "Multi-view RGB images with unpaired flash and ambient illumination states.",
+      "evaluation": "The primary abstract reports real-world transmitted/reflected reconstruction and comparison with reflection-separation baselines.",
+      "hardware": "A controllable on-camera or calibrated flash capture is required; exact camera/GPU details were not inspected.",
+      "limitations": "E1 coding; requires active illumination changes and does not recover a general BRDF, refraction, or full multi-bounce transport.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "task_outcome"
+      ],
+      "hardware_fields": [
+        "sensor_setup"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "unseen_intervention",
+        "optical_transport"
+      ],
+      "analysis_group": "sensor_media_radiative_imaging"
+    },
+    {
+      "id": "O057",
+      "title": "3DGUT: Enabling Distorted Cameras and Secondary Rays in Gaussian Splatting",
+      "url": "https://arxiv.org/abs/2412.12507",
+      "year": 2024,
+      "branch": "physical_optics",
+      "subclass": "camera and sensor image formation",
+      "publication": "CVPR 2025",
+      "access": "open arXiv full text; venue version may be paywalled",
+      "evidence": "E2 full text",
+      "novelty": "Uses an unscented-transform projection for nonlinear cameras and a ray-tracing-compatible Gaussian formulation, enabling distorted lenses and secondary rays without reducing them to a pinhole rasterizer.",
+      "gaussian_role": "Gaussians remain the primary scene primitives while their projection and intersection are generalized beyond affine screen-space splatting.",
+      "physical_model": "Nonlinear camera projection through the unscented transform plus ray-based visibility for secondary transport paths.",
+      "inputs": "Posed multi-view images from pinhole or distorted camera models and Gaussian scenes used for secondary-ray evaluation.",
+      "evaluation": "Novel-view quality under multiple camera models, secondary-ray applications, timing, and comparisons with conventional Gaussian rasterization.",
+      "hardware": "Reported rendering configurations take about 3.77–4.98 ms, corresponding to roughly 200–277 FPS; device identity is workload-specific in the inspected evidence.",
+      "limitations": "The generalized renderer does not by itself identify a camera, material, or complete global-illumination solution; acceleration quality and scene settings qualify the timing.",
+      "causal_level": 4,
+      "metric_families": [
+        "appearance",
+        "geometry",
+        "efficiency"
+      ],
+      "hardware_fields": [
+        "rendering_rate"
+      ],
+      "capabilities": [
+        "explicit_state",
+        "unseen_intervention",
+        "optical_transport"
+      ],
+      "analysis_group": "sensor_media_radiative_imaging"
+    }
+  ]
+}
